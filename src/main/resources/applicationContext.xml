@@ -12,17 +12,16 @@
     <bean id="musicBean1"
           class="com.udemy.springcourse.ClassicalMusic">
     </bean>
-
     <bean id="musicBean2"
           class="com.udemy.springcourse.RockMusic">
     </bean>
-
     <bean id="musicBean3"
           class="com.udemy.springcourse.RapMusic">
     </bean>
 
     <bean id="musicPlayer"
-          class="com.udemy.springcourse.MusicPlayer">
+          class="com.udemy.springcourse.MusicPlayer"
+          scope="prototype">
         <property name="musicList">
             <list>
                 <ref bean="musicBean1"/>
