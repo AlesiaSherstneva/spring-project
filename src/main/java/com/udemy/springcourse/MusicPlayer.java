@@ -24,7 +24,6 @@ public class MusicPlayer {
         return volume;
     }
 
-    @Autowired
     public MusicPlayer(@Qualifier("classicalMusic") Music music1,
                        @Qualifier("rockMusic") Music music2) {
         this.music1 = music1;

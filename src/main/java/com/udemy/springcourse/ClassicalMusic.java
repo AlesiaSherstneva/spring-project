@@ -6,7 +6,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.util.Random;
 
-@Component
 public class ClassicalMusic implements Music {
 
     @PostConstruct
