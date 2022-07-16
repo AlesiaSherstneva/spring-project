@@ -1,12 +1,10 @@
 package com.udemy.springcourse;
 
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.Random;
 
 @Component
-@Scope("prototype")
 public class RockMusic implements Music {
     @Override
     public String getSong() {
