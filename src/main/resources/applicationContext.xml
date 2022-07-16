@@ -8,4 +8,5 @@
         http://www.springframework.org/schema/context/spring-context.xsd">
 
     <context:component-scan base-package="com.udemy.springcourse"/>
+    <context:property-placeholder location="classpath:musicPlayer.properties"/>
 </beans>
