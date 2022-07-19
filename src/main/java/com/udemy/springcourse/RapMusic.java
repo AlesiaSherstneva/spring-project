@@ -2,12 +2,12 @@ package com.udemy.springcourse;
 
 import java.util.Random;
 
-public class ClassicalMusic implements Music {
+public class RapMusic implements Music{
     @Override
     public String getSong() {
-        String[] songs = {"Franz Liszt - Hungarian Rhapsody",
-                "Wolfgang Amadeus Mozart - Requiem",
-                "Ludwig van Beethoven - Moonlight sonata"};
+        String[] songs = {"Morgenstern - Noviy merin",
+                "Instasamka - Juicy",
+                "Ganvest - Goba"};
         Random random = new Random();
         int randomSong = random.nextInt(3);
         return songs[randomSong];

@@ -12,6 +12,6 @@ public class RockMusic implements Music {
                 "Royal Republic - Tommy Gun"};
         Random random = new Random();
         int randomSong = random.nextInt(3);
-        return "playing: " + songs[randomSong];
+        return songs[randomSong];
     }
 }

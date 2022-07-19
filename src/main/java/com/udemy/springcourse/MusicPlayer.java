@@ -1,40 +1,26 @@
 package com.udemy.springcourse;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import java.util.List;
+import java.util.Random;
 
-@Component
 public class MusicPlayer {
-    @Value("${musicPlayer.name}")
-    private String name;
+    private Genres genres;
 
-    @Value("${musicPlayer.volume}")
-    private int volume;
-
-    private final Music music1;
-    private final Music music2;
-
-    public String getName() {
-        return name;
+    public MusicPlayer(Genres genres) {
+        this.genres = genres;
     }
 
-    public int getVolume() {
-        return volume;
+    public Genres getGenres() {
+        return genres;
     }
 
-    public MusicPlayer(@Qualifier("classicalMusic") Music music1,
-                       @Qualifier("rockMusic") Music music2) {
-        this.music1 = music1;
-        this.music2 = music2;
+    public void setGenres(Genres genres) {
+        this.genres = genres;
     }
 
-    public void playMusic(Genre genre) {
-        if(genre == Genre.CLASSICAL) {
-            System.out.println(music1.getSong());
-        } else {
-            System.out.println(music2.getSong());
-        }
+    public void playMusic() {
+        Random random = new Random();
+        System.out.println("Playing: "
+                + genres.getMusicList().get(random.nextInt(3)).getSong());
     }
 }
