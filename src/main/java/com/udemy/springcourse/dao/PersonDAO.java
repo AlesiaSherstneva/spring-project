@@ -32,10 +32,8 @@ public class PersonDAO {
     }
 
     public Person show(int id) {
-        return jdbcTemplate.query("SELECT * FROM Person WHERE id = ?",
-                        new Object[]{id},
-                        new BeanPropertyRowMapper<>(Person.class))
-                .stream().findAny().orElse(null);
+        return jdbcTemplate.queryForObject("SELECT * FROM Person WHERE id = ? LIMIT 1",
+                new BeanPropertyRowMapper<>(Person.class), id);
     }
 
     public void save(Person person) {
