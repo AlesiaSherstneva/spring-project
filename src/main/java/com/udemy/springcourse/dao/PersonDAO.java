@@ -2,6 +2,7 @@ package com.udemy.springcourse.dao;
 
 import com.udemy.springcourse.pojo.Person;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -34,6 +35,15 @@ public class PersonDAO {
     public List<Person> index() {
         return jdbcTemplate.query("SELECT * FROM Person",
                 new BeanPropertyRowMapper<>(Person.class));
+    }
+
+    public Person show(String email) {
+        try {
+            return jdbcTemplate.queryForObject("SELECT * FROM Person WHERE email = ?",
+                    new BeanPropertyRowMapper<>(Person.class), email);
+        } catch (EmptyResultDataAccessException exception) {
+            return null;
+        }
     }
 
     public Person show(int id) {
