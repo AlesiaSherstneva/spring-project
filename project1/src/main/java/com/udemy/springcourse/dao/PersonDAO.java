@@ -1,5 +1,6 @@
 package com.udemy.springcourse.dao;
 
+import com.udemy.springcourse.mappers.PersonMapper;
 import com.udemy.springcourse.pojo.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -18,6 +19,6 @@ public class PersonDAO {
     }
 
     public List<Person> showPeople() {
-        return jdbcTemplate.query("SELECT * FROM Person", new BeanPropertyRowMapper<>(Person.class));
+        return jdbcTemplate.query("SELECT * FROM Person", new PersonMapper());
     }
 }
