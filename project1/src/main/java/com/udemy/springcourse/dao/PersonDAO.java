@@ -2,6 +2,7 @@ package com.udemy.springcourse.dao;
 
 import com.udemy.springcourse.pojo.Person;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,15 @@ public class PersonDAO {
 
     public List<Person> showPeople() {
         return jdbcTemplate.query("SELECT * FROM Person", new BeanPropertyRowMapper<>(Person.class));
+    }
+
+    public Person showPerson(String name) {
+        try {
+            return jdbcTemplate.queryForObject("SELECT * FROM Person WHERE name = ?",
+                    new BeanPropertyRowMapper<>(Person.class), name);
+        } catch (EmptyResultDataAccessException exception) {
+            return null;
+        }
     }
 
     public void save(Person person) {
