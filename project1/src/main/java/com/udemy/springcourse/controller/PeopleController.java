@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -31,6 +28,12 @@ public class PeopleController {
     public String showPeople(Model model) {
         model.addAttribute("people", personDAO.showPeople());
         return "people/show";
+    }
+
+    @GetMapping("{id}")
+    public String showPerson(@PathVariable("id") int id, Model model) {
+        model.addAttribute("person", personDAO.showPerson(id));
+        return "people/profile";
     }
 
     @GetMapping("/new")

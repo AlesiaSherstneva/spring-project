@@ -22,6 +22,15 @@ public class PersonDAO {
         return jdbcTemplate.query("SELECT * FROM Person", new BeanPropertyRowMapper<>(Person.class));
     }
 
+    public Person showPerson(int id) {
+        try {
+            return jdbcTemplate.queryForObject("SELECT * FROM Person WHERE id = ?",
+                    new BeanPropertyRowMapper<>(Person.class), id);
+        } catch (EmptyResultDataAccessException exception) {
+            return null;
+        }
+    }
+
     public Person showPerson(String name) {
         try {
             return jdbcTemplate.queryForObject("SELECT * FROM Person WHERE name = ?",
