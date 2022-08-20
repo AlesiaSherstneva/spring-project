@@ -16,27 +16,27 @@ public class Person {
         this.year_of_birth = year_of_birth;
     }
 
-    public int getUser_id() {
+    public int getId() {
         return user_id;
     }
 
-    public void setUser_id(int user_id) {
+    public void setId(int user_id) {
         this.user_id = user_id;
     }
 
-    public String getFull_name() {
+    public String getName() {
         return full_name;
     }
 
-    public void setFull_name(String full_name) {
+    public void setName(String full_name) {
         this.full_name = full_name;
     }
 
-    public int getYear_of_birth() {
+    public int getYear() {
         return year_of_birth;
     }
 
-    public void setYear_of_birth(int year_of_birth) {
+    public void setYear(int year_of_birth) {
         this.year_of_birth = year_of_birth;
     }
 }
