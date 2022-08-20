@@ -1,42 +1,49 @@
 package com.udemy.springcourse.pojo;
 
+import javax.validation.constraints.*;
+
+
 public class Person {
-    private int user_id;
+    private int id;
 
-    private String full_name;
+    @NotEmpty(message = "Это поле не может быть пустым")
+    @Pattern(regexp = "([А-ЯЁ][а-яА-ЯёЁ\\-]+\\s){2}[А-ЯЁ][а-яё]+",
+            message = "Должен быть формат: Фамилия Имя Отчество")
+    private String name;
 
-    private int year_of_birth;
+    @Min(value = 1900, message = "Год рождения должен быть больше 1900")
+    private int year;
 
     public Person() {
     }
 
-    public Person(int user_id, String full_name, int year_of_birth) {
-        this.user_id = user_id;
-        this.full_name = full_name;
-        this.year_of_birth = year_of_birth;
+    public Person(int id, String name, int year) {
+        this.id = id;
+        this.name = name;
+        this.year = year;
     }
 
     public int getId() {
-        return user_id;
+        return id;
     }
 
-    public void setId(int user_id) {
-        this.user_id = user_id;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
-        return full_name;
+        return name;
     }
 
-    public void setName(String full_name) {
-        this.full_name = full_name;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getYear() {
-        return year_of_birth;
+        return year;
     }
 
-    public void setYear(int year_of_birth) {
-        this.year_of_birth = year_of_birth;
+    public void setYear(int year) {
+        this.year = year;
     }
 }
