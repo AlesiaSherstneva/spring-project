@@ -14,7 +14,6 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/people")
 public class PeopleController {
-
     private final PersonDAO personDAO;
     private final UniquePersonValidator validator;
 
