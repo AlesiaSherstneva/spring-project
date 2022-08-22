@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/library.css}"/>
-<!--    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/people.css}"/>-->
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/head.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/form.css}"/>
     <title>Профиль читателя</title>
 </head>
 <body>
-<div class="container">
-    <section id="content">
-        <p th:text="${person.getName()} + ', ' + ${person.getYear()}">reader</p>
-        <br><hr/>
+<div class="form">
+    <p th:text="${person.getName()} + ', ' + ${person.getYear()}">reader</p>
+    <br>
+    <hr/>
 
-        <form th:method="POST" th:action="@{/people/{id}/edit(id=${person.getId()})}">
-            <input type="submit" value="Редактировать читателя"/>
-        </form>
+    <form th:method="POST" th:action="@{/people/{id}/edit(id=${person.getId()})}">
+        <input type="submit" value="Редактировать читателя"/>
+    </form>
 
-        <form th:method="POST" th:action="@{/people/{id}(id=${person.getId()})}">
-            <input type="submit" value="Удалить читателя"/>
-        </form>
-    </section>
+    <form th:method="POST" th:action="@{/people/{id}(id=${person.getId()})}">
+        <input type="submit" value="Удалить читателя"/>
+    </form>
+
 </div>
 </body>
 </html>

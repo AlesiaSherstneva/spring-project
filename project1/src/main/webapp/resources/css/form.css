@@ -1,0 +1,9 @@
+.form {
+    max-width: 400px;
+    margin: 10px 50px;
+    padding: 20px;
+    background: whitesmoke;
+    border: 10px solid transparent;
+    border-image: 10 repeating-linear-gradient(135deg, gold, goldenrod 10px, transparent 50px, transparent 20px);
+    color: #605756;
+}
