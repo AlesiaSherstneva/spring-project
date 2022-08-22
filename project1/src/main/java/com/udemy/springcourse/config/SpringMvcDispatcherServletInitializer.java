@@ -1,6 +1,7 @@
 package com.udemy.springcourse.config;
 
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import javax.servlet.DispatcherType;
@@ -31,6 +32,7 @@ public class SpringMvcDispatcherServletInitializer
     public void onStartup(ServletContext aServletContext) throws ServletException {
         super.onStartup(aServletContext);
         registerCharacterEncodingFilter(aServletContext);
+        registerHiddenFieldFilter(aServletContext);
     }
 
     private void registerCharacterEncodingFilter(ServletContext aContext) {
@@ -42,5 +44,10 @@ public class SpringMvcDispatcherServletInitializer
 
         FilterRegistration.Dynamic characterEncoding = aContext.addFilter("characterEncoding", characterEncodingFilter);
         characterEncoding.addMappingForUrlPatterns(dispatcherTypes, true, "/*");
+    }
+
+    private void registerHiddenFieldFilter(ServletContext aContext) {
+        aContext.addFilter("hiddenHttpMethodFilter",
+                new HiddenHttpMethodFilter()).addMappingForUrlPatterns(null ,true, "/*");
     }
 }

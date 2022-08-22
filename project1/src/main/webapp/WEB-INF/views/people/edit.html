@@ -5,11 +5,11 @@
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/library.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/head.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/form.css}"/>
-    <title>Новый читатель</title>
+    <title>Редактирование читателя</title>
 </head>
 <body>
 <div class="form">
-    <form th:method="POST" th:action="@{/people}" th:object="${person}">
+    <form th:method="PATCH" th:action="@{/people/{id}(id=${person.getId()})}" th:object="${person}">
         <label for="name">Введите ФИО полностью:</label>
         <input type="text" th:field="*{name}" id="name">
         <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</div>
@@ -18,8 +18,9 @@
         <input type="text" th:field="*{year}" id="year">
         <div style="color:red" th:if="${#fields.hasErrors('year')}" th:errors="*{year}">Year error</div>
         <br/>
-        <input type="submit" value="Добавить читателя">
+        <input type="submit" value="Редактировать">
     </form>
 </div>
+
 </body>
 </html>
