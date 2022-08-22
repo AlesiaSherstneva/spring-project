@@ -44,4 +44,8 @@ public class PersonDAO {
         jdbcTemplate.update("INSERT INTO Person(name, year) VALUES (?, ?)",
                 person.getName(), person.getYear());
     }
+
+    public void delete(int id) {
+        jdbcTemplate.update("DELETE FROM Person WHERE id = ?", id);
+    }
 }

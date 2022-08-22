@@ -41,11 +41,17 @@ public class PeopleController {
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("person") @Valid Person person,
-                         BindingResult bindingResult) {
+    public String createPerson(@ModelAttribute("person") @Valid Person person,
+                               BindingResult bindingResult) {
         validator.validate(person, bindingResult);
         if (bindingResult.hasErrors()) return "people/new";
         personDAO.save(person);
-        return "redirect:people";
+        return "redirect:/people";
+    }
+
+    @PostMapping("{id}")
+    public String deletePerson(@PathVariable("id") int id) {
+        personDAO.delete(id);
+        return "redirect:/people";
     }
 }
