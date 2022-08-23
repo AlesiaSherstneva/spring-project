@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/library.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/books.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/form.css}"/>
+    <title>Профиль читателя</title>
+</head>
+<body>
+<div class="form">
+    <p th:text="${book.getTitle()} + ', ' + ${book.getAuthor()}+ ', ' + ${book.getYear()}">book</p>
+    <br>
+    <hr/>
+
+    <form th:method="GET" th:action="@{/books/{id}/edit(id=${book.getId()})}">
+        <input type="submit" value="Редактировать книгу"/>
+    </form>
+
+    <form th:method="DELETE" th:action="@{/books/{id}(id=${book.getId()})}">
+        <input type="submit" value="Удалить книгу"/>
+    </form>
+
+</div>
+</body>
+</html>
