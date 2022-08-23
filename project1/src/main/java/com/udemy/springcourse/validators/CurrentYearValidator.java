@@ -8,7 +8,6 @@ import java.time.YearMonth;
 public class CurrentYearValidator implements ConstraintValidator<CurrentYear, Integer> {
     @Override
     public boolean isValid(Integer value, ConstraintValidatorContext context) {
-        int year = YearMonth.now().getYear();
-        return value <= year;
+        return value <= YearMonth.now().getYear();
     }
 }
