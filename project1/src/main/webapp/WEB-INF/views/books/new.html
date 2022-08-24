@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/library.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/books.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/form.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/frame.css}"/>
     <title>Новый читатель</title>
 </head>
 <body>
-<div class="form">
+<div class="frame">
     <form th:method="POST" th:action="@{/books}" th:object="${book}">
         <label for="title">Введите название книги:</label>
         <input type="text" th:field="*{title}" id="title">

@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/library.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/head.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/form.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/frame.css}"/>
     <title>Новый читатель</title>
 </head>
 <body>
-<div class="form">
+<div class="frame">
     <form th:method="POST" th:action="@{/people}" th:object="${person}">
         <label for="name">Введите ФИО полностью:</label>
         <input type="text" th:field="*{name}" id="name">

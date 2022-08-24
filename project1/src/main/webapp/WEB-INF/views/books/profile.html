@@ -4,13 +4,26 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/library.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/books.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/form.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/frame.css}"/>
     <title>Профиль читателя</title>
 </head>
 <body>
-<div class="form">
+<div class="frame">
     <p th:text="${book.getTitle()} + ', ' + ${book.getAuthor()}+ ', ' + ${book.getYear()}">book</p>
     <br>
+    <!--    <p th:if="${book.getPerson_id()}">Книга занята</p>
+        <div th:unless="${book.getPerson_id()}"></div>-->
+    <p>Эта книга свободна. Кому назначить её?</p>
+    <form th:method="PATCH" th:action="@{/admin/add}">
+        <label for="person">Choose person</label>
+        <select th:object="${person}" th:field="*{id}" id="person">
+            <option
+                    th:each="person : ${people}" th:value="${person.getId()}"
+                    th:text="${person.getName()}">
+            </option>
+        </select>
+        <input type="submit" value="Appoint admin">
+    </form>
     <hr/>
 
     <form th:method="GET" th:action="@{/books/{id}/edit(id=${book.getId()})}">
