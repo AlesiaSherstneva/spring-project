@@ -1,7 +1,6 @@
 package com.udemy.springcourse.dao;
 
 import com.udemy.springcourse.pojo.Book;
-import com.udemy.springcourse.pojo.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -20,7 +19,12 @@ public class BookDAO {
     }
 
     public List<Book> showBooks() {
-        return jdbcTemplate.query("SELECT * FROM Book", new BeanPropertyRowMapper<>(Book.class));
+        return jdbcTemplate.query("SELECT * FROM Book ORDER BY title", new BeanPropertyRowMapper<>(Book.class));
+    }
+
+    public List<Book> showBooksByPerson(int person_id) {
+        return jdbcTemplate.query("SELECT * FROM Book WHERE person_id = ?",
+                new BeanPropertyRowMapper<>(Book.class), person_id);
     }
 
     public Book showBook(int id) {
@@ -38,8 +42,8 @@ public class BookDAO {
     }
 
     public void update(int id, Book book) {
-        jdbcTemplate.update("UPDATE Book SET title = ?, author = ?, year = ? WHERE id = ?",
-                book.getTitle(), book.getAuthor(), book.getYear(), book.getId());
+        jdbcTemplate.update("UPDATE Book SET person_id = ?, title = ?, author = ?, year = ? WHERE id = ?",
+                book.getPerson_id(), book.getTitle(), book.getAuthor(), book.getYear(), id);
     }
 
     public void delete(int id) {
