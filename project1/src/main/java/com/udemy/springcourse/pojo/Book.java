@@ -11,7 +11,7 @@ public class Book {
     private Integer person_id;
 
     @NotEmpty(message = "Это поле не может быть пустым")
-    @Pattern(regexp = "[А-ЯЁ][а-яА-ЯёЁ\\-\\s]+",
+    @Pattern(regexp = "[0-9А-ЯЁ][0-9а-яА-ЯёЁ\\-\\s]+",
             message = "Должен быть формат \"Название\" на русском языке")
     private String title;
 
