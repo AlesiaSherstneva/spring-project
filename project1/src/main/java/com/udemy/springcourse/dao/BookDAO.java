@@ -41,6 +41,10 @@ public class BookDAO {
                 book.getTitle(), book.getAuthor(), book.getYear());
     }
 
+    public void free(int id) {
+        jdbcTemplate.update("UPDATE Book set person_id = NULL where id = ?", id);
+    }
+
     public void update(int id, Book book) {
         jdbcTemplate.update("UPDATE Book SET person_id = ?, title = ?, author = ?, year = ? WHERE id = ?",
                 book.getPerson_id(), book.getTitle(), book.getAuthor(), book.getYear(), id);
