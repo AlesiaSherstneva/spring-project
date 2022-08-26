@@ -5,10 +5,10 @@ import com.udemy.springcourse.validators.CurrentYear;
 import javax.validation.constraints.*;
 
 
+@SuppressWarnings("unused")
 public class Person {
     private int id;
 
-    @NotEmpty(message = "Это поле не может быть пустым")
     @Pattern(regexp = "([А-ЯЁ][а-яА-ЯёЁ\\-]+\\s){2}[А-ЯЁ][а-яё]+",
             message = "Должен быть формат \"Фамилия Имя Отчество\" на русском языке")
     private String name;

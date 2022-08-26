@@ -6,16 +6,15 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
+@SuppressWarnings("unused")
 public class Book {
     private int id;
     private Integer person_id;
 
-    @NotEmpty(message = "Это поле не может быть пустым")
     @Pattern(regexp = "[0-9А-ЯЁ][0-9а-яА-ЯёЁ\\-\\s]+",
             message = "Должен быть формат \"Название\" на русском языке")
     private String title;
 
-    @NotEmpty(message = "Это поле не может быть пустым")
     @Pattern(regexp = "[А-ЯЁ][а-яА-ЯёЁ\\-]+\\s[А-ЯЁ][а-яА-ЯёЁ\\-]+",
             message = "Должен быть формат \"Фамилия Имя\" на русском языке")
     private String author;
