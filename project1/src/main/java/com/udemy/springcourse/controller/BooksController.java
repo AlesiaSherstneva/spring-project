@@ -37,8 +37,9 @@ public class BooksController {
         model.addAttribute("book", book);
         if(book.getPerson_id() != null) {
             model.addAttribute("reader", personDAO.showPerson(book.getPerson_id()));
+        } else {
+            model.addAttribute("people", personDAO.showPeople());
         }
-        model.addAttribute("people", personDAO.showPeople());
         return "books/profile";
     }
 
@@ -76,7 +77,7 @@ public class BooksController {
         Book book = bookDAO.showBook(id);
         book.setPerson_id(person.getId());
         bookDAO.update(id, book);
-        return "redirect:/books";
+        return "redirect:/books/{id}";
     }
 
     @DeleteMapping("/{id}")
