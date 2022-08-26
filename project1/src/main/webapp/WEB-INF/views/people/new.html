@@ -12,14 +12,26 @@
     <form th:method="POST" th:action="@{/people}" th:object="${person}">
         <label for="name">Введите ФИО полностью:</label>
         <input type="text" th:field="*{name}" id="name">
-        <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</div>
+        <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</div>
         <br/>
         <label for="year">Введите год рождения:</label>
         <input type="text" th:field="*{year}" id="year">
-        <div style="color:red" th:if="${#fields.hasErrors('year')}" th:errors="*{year}">Year error</div>
+        <div class="error" th:if="${#fields.hasErrors('year')}" th:errors="*{year}">Year error</div>
         <br/>
-        <input type="submit" value="Добавить читателя">
+        <input type="submit" class="button" value="Добавить читателя">
     </form>
+    <hr/>
+    <div class="btn-group">
+        <div class="button">
+            <a th:href="@{/people}">Все читатели</a>
+        </div>
+        <div class="button">
+            <a th:href="@{/books}">Все книги</a>
+        </div>
+        <div class="button">
+            <a th:href="@{/}">На главную</a>
+        </div>
+    </div>
 </div>
 </body>
 </html>

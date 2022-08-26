@@ -35,7 +35,25 @@ A:visited {
     transition: all 0.2s;
 }
 
-.list:hover {
+.list:hover, .btn-group .button:hover, .button:hover{
     background: gold;
     transform: scale(1.05);
+}
+
+.btn-group .button, .button {
+    background-color: goldenrod;
+    border: none;
+    color: black;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 10px 20px;
+    text-align: center;
+    display: inline-block;
+    font-size: 15px;
+    transform: scale(1);
+    transition: all 0.2s;
+}
+
+.error {
+    color:red;
 }

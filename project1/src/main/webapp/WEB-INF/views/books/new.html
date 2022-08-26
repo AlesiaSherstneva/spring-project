@@ -12,18 +12,30 @@
     <form th:method="POST" th:action="@{/books}" th:object="${book}">
         <label for="title">Введите название книги:</label>
         <input type="text" th:field="*{title}" id="title">
-        <div style="color:red" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title error</div>
+        <div class="error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title error</div>
         <br/>
         <label for="author">Введите имя и фамилию автора:</label>
         <input type="text" th:field="*{author}" id="author">
-        <div style="color:red" th:if="${#fields.hasErrors('author')}" th:errors="*{author}">Author error</div>
+        <div class="error" th:if="${#fields.hasErrors('author')}" th:errors="*{author}">Author error</div>
         <br/>
         <label for="year">Введите год издания:</label>
         <input type="text" th:field="*{year}" id="year">
-        <div style="color:red" th:if="${#fields.hasErrors('year')}" th:errors="*{year}">Year error</div>
+        <div class="error" th:if="${#fields.hasErrors('year')}" th:errors="*{year}">Year error</div>
         <br/>
-        <input type="submit" value="Добавить книгу">
+        <input type="submit" class="button" value="Добавить книгу">
     </form>
+    <hr/>
+    <div class="btn-group">
+        <div class="button">
+            <a th:href="@{/people}">Все читатели</a>
+        </div>
+        <div class="button">
+            <a th:href="@{/books}">Все книги</a>
+        </div>
+        <div class="button">
+            <a th:href="@{/}">На главную</a>
+        </div>
+    </div>
 </div>
 </body>
 </html>
