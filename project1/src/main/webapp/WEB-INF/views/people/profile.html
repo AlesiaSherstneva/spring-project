@@ -11,8 +11,19 @@
 <div class="frame">
     <p th:text="${person.getName()} + ', ' + ${person.getYear()}">reader</p>
     <br>
+    <div th:if="${books}">
+        <hr/>
+        <p><b>Книги:</b></p>
+        <div th:each="book : ${books}" >
+            <a th:text="${book.getTitle()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()}">book</a>
+        </div>
+    </div>
+    <div th:unless="${books}">
+        <p>Человек пока не взял ни одной книги</p>
+    </div>
+    <br>
     <hr/>
-
+    <br>
     <form th:method="GET" th:action="@{/people/{id}/edit(id=${person.getId()})}">
         <input type="submit" value="Редактировать читателя"/>
     </form>

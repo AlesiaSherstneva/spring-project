@@ -1,6 +1,8 @@
 package com.udemy.springcourse.controller;
 
+import com.udemy.springcourse.dao.BookDAO;
 import com.udemy.springcourse.dao.PersonDAO;
+import com.udemy.springcourse.pojo.Book;
 import com.udemy.springcourse.pojo.Person;
 import com.udemy.springcourse.validators.UniquePersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,16 +12,19 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("/people")
 public class PeopleController {
     private final PersonDAO personDAO;
+    private final BookDAO bookDAO;
     private final UniquePersonValidator validator;
 
     @Autowired
-    public PeopleController(PersonDAO personDAO, UniquePersonValidator validator) {
+    public PeopleController(PersonDAO personDAO, BookDAO bookDAO, UniquePersonValidator validator) {
         this.personDAO = personDAO;
+        this.bookDAO = bookDAO;
         this.validator = validator;
     }
 
@@ -32,6 +37,11 @@ public class PeopleController {
     @GetMapping("/{id}")
     public String showPerson(@PathVariable("id") int id, Model model) {
         model.addAttribute("person", personDAO.showPerson(id));
+        List<Book> books = bookDAO.showBooksByPerson(id);
+        System.out.println(books);
+        if (!books.isEmpty()) {
+            model.addAttribute("books", books);
+        }
         return "people/profile";
     }
 
