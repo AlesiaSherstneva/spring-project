@@ -26,7 +26,7 @@ public class UniquePersonValidator implements Validator {
         Person person = (Person) object;
         if(personDAO.showPerson(person.getName()) != null
                 && person.getId() != personDAO.showPerson(person.getName()).getId()) {
-            errors.rejectValue("name", "", "Читатель с таким именем уже существует");
+            errors.rejectValue("name", "", "Читатель с таким ФИО уже существует");
         }
     }
 }

@@ -19,7 +19,7 @@ public class Book {
             message = "Должен быть формат \"Фамилия Имя\" на русском языке")
     private String author;
 
-    @Min(value = 1900, message = "Год рождения должен быть больше 1445")
+    @Min(value = 1445, message = "Год издания должен быть больше 1445")
     @CurrentYear
     private int year;
 
