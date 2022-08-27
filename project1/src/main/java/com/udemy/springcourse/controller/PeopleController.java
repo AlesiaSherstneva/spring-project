@@ -38,7 +38,6 @@ public class PeopleController {
     public String showPerson(@PathVariable("id") int id, Model model) {
         model.addAttribute("person", personDAO.showPerson(id));
         List<Book> books = bookDAO.showBooksByPerson(id);
-        System.out.println(books);
         if (!books.isEmpty()) {
             model.addAttribute("books", books);
         }
