@@ -1,2 +1,21 @@
 ![img.png](img.png)
 ![img_1.png](img_1.png)
+
+<p>Функционал реализован в полном объёме.<br>Использованные технологии: Java 11 SE, Apache Maven, Apache Tomcat, 
+JDBC, PostgreSQL, Spring Core, Spring MVC, Thymeleaf, HTML, CSS.</p>
+
+<p>Титульные страницы:</p>
+
+![img_2.gif](img_2.gif)
+
+<p>Создание и редактирование читателя (с валидацией):</p>
+
+![img_3.gif](img_3.gif)
+
+<p>Создание и редактирование книги (с валидацией):</p>
+
+![img_4.gif](img_4.gif)
+
+<p>Профиль читателя, профиль книги, освобождение книги при удалении читателя:</p>
+
+![img_5.gif](img_5.gif)
