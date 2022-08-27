@@ -20,7 +20,7 @@
     <div th:unless="${reader}">
         <p>Эта книга свободна. Кому назначить её?</p>
         <form th:method="PATCH" th:action="@{/books/{id}/person(id=${book.getId()})}">
-            <label for="person">Выбрать человека</label>
+            <label for="person">Выберите читателя</label>
             <select th:object="${person}" th:field="*{id}" id="person">
                 <option th:each="person : ${people}" th:value="${person.getId()}"
                         th:text="${person.getName()}"></option>
