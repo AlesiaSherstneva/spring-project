@@ -4,6 +4,8 @@
 <p>Функционал реализован в полном объёме.<br>Использованные технологии: Java 11 SE, Apache Maven, Apache Tomcat, 
 JDBC, PostgreSQL, Spring Core, Spring MVC, Thymeleaf, HTML, CSS.</p>
 
+<p><i>(*) Если gif-картинки не отображаются, обновите страницу, и они загрузятся.</i></p>
+
 <p>Титульные страницы:</p>
 
 ![img_2.gif](img_2.gif)
