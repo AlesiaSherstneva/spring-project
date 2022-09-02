@@ -15,10 +15,12 @@ public class App {
         try (sessionFactory) {
             session.beginTransaction();
 
-            Person person = session.get(Person.class, 2);
-            session.delete(person);
+            Person person = new Person("Some name", 60);
+            session.save(person);
 
             session.getTransaction().commit();
+
+            System.out.println(person.getId());
         }
     }
 }
