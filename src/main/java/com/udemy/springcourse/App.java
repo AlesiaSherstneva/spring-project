@@ -16,7 +16,7 @@ public class App {
             session.beginTransaction();
 
             Person person = session.get(Person.class, 2);
-            person.setName("New name");
+            session.delete(person);
 
             session.getTransaction().commit();
         }
