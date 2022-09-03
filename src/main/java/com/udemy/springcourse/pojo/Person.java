@@ -48,4 +48,9 @@ public class Person {
     public void setAge(int age) {
         this.age = age;
     }
+
+    @Override
+    public String toString() {
+        return this.name + ", " + this.age;
+    }
 }
