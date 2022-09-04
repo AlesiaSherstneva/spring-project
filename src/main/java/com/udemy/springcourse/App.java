@@ -17,7 +17,7 @@ public class App {
         try (sessionFactory) {
             session.beginTransaction();
 
-            session.createQuery("UPDATE Person SET name = 'Test' WHERE age < 30")
+            session.createQuery("DELETE FROM Person WHERE age < 30")
                     .executeUpdate();
 
             session.getTransaction().commit();
