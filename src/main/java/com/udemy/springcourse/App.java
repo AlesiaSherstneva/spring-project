@@ -5,6 +5,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
+import java.util.List;
+
 public class App {
     public static void main(String[] args) {
         Configuration configuration = new Configuration().addAnnotatedClass(Person.class);
@@ -15,11 +17,10 @@ public class App {
         try (sessionFactory) {
             session.beginTransaction();
 
-            session.save(new Person("Tom", 20));
-            session.save(new Person("Test1", 30));
-            session.save(new Person("Mike", 35));
-            session.save(new Person("John", 50));
-            session.save(new Person("Katy", 18));
+            List<Person> people = session.createQuery("from Person").getResultList();
+            for(Person person: people) {
+                System.out.println(person);
+            }
 
             session.getTransaction().commit();
         } finally {
