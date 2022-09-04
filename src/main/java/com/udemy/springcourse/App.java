@@ -1,15 +1,12 @@
 package com.udemy.springcourse;
 
-import com.udemy.springcourse.pojo.Person;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import java.util.List;
-
 public class App {
     public static void main(String[] args) {
-        Configuration configuration = new Configuration().addAnnotatedClass(Person.class);
+        Configuration configuration = new Configuration();
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.getCurrentSession();
 
@@ -17,8 +14,7 @@ public class App {
         try (sessionFactory) {
             session.beginTransaction();
 
-            session.createQuery("DELETE FROM Person WHERE age < 30")
-                    .executeUpdate();
+
 
             session.getTransaction().commit();
         } finally {
