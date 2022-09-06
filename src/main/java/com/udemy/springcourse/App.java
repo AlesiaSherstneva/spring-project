@@ -11,7 +11,7 @@ public class App {
         Session session = sessionFactory.getCurrentSession();
 
 
-        try (sessionFactory) {
+        try {
             session.beginTransaction();
 
 
