@@ -23,9 +23,9 @@ public class Person {
     public Person() {
     }
 
-    public Person(int id, String name) {
-        this.id = id;
+    public Person(String name, int age) {
         this.name = name;
+        this.age = age;
     }
 
     public int getId() {
