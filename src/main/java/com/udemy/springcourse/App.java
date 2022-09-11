@@ -20,11 +20,11 @@ public class App {
         try {
             session.beginTransaction();
 
-            Item item = session.get(Item.class, 5);
-            System.out.println(item);
+            Person person = session.get(Person.class, 2);
+            Item item = new Item("Item from Hibernate", person);
+            person.getItems().add(item);
 
-            Person person = item.getOwner();
-            System.out.println(person);
+            session.save(item);
 
             session.getTransaction().commit();
         } finally {
