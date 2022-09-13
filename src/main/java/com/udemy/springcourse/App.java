@@ -8,6 +8,7 @@ import org.hibernate.cfg.Configuration;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class App {
     public static void main(String[] args) {
@@ -21,13 +22,12 @@ public class App {
         try {
             session.beginTransaction();
 
-            Person person = new Person("Test name", 30);
-            Item item = new Item("Item from Hibernate 2", person);
-
-            person.setItems(new ArrayList<>(Collections.singletonList(item)));
-
-            session.save(person);
-            session.save(item);
+            Person person = session.get(Person.class, 3);
+            List<Item> items = person.getItems();
+            for(Item item: items) {
+                session.remove(item);
+            }
+            person.getItems().clear();
 
             session.getTransaction().commit();
         } finally {
