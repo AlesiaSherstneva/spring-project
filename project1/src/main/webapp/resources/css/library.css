@@ -35,7 +35,7 @@ A:visited {
     transition: all 0.2s;
 }
 
-.list:hover, .btn-group .button:hover, .button:hover{
+.list:hover, .btn-group .button:hover, .button:hover {
     background: gold;
     transform: scale(1.05);
 }
@@ -55,5 +55,5 @@ A:visited {
 }
 
 .error {
-    color:red;
+    color: red;
 }

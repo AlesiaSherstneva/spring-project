@@ -35,7 +35,7 @@ public class BooksController {
                            @ModelAttribute("person") Person person) {
         Book book = bookDAO.showBook(id);
         model.addAttribute("book", book);
-        if(book.getPerson_id() != null) {
+        if (book.getPerson_id() != null) {
             model.addAttribute("reader", personDAO.showPerson(book.getPerson_id()));
         } else {
             model.addAttribute("people", personDAO.showPeople());
