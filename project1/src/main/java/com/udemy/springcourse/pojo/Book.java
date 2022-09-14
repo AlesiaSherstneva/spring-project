@@ -3,7 +3,6 @@ package com.udemy.springcourse.pojo;
 import com.udemy.springcourse.validators.CurrentYear;
 
 import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
 @SuppressWarnings("unused")
