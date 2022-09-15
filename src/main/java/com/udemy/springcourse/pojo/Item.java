@@ -20,9 +20,8 @@ public class Item {
     public Item() {
     }
 
-    public Item(String itemName, Person owner) {
+    public Item(String itemName) {
         this.itemName = itemName;
-        this.owner = owner;
     }
 
     public int getId() {

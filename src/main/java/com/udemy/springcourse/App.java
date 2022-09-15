@@ -6,9 +6,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class App {
     public static void main(String[] args) {
@@ -23,8 +20,9 @@ public class App {
             session.beginTransaction();
 
             Person person = new Person("Test cascading", 30);
-            Item item = new Item("Test cascading item", person);
-            person.setItems(new ArrayList<>(Collections.singletonList(item)));
+            person.addItem(new Item("Item 1"));
+            person.addItem(new Item("Item 2"));
+            person.addItem(new Item("Item 3"));
 
             session.save(person);
 
