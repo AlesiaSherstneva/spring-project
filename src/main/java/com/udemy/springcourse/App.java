@@ -22,12 +22,11 @@ public class App {
         try {
             session.beginTransaction();
 
-            Person person = session.get(Person.class, 4);
-            Item item = session.get(Item.class, 1);
+            Person person = new Person("Test cascading", 30);
+            Item item = new Item("Test cascading item", person);
+            person.setItems(new ArrayList<>(Collections.singletonList(item)));
 
-            item.getOwner().getItems().remove(item);
-            item.setOwner(person);
-            person.getItems().add(item);
+            session.persist(person);
 
             session.getTransaction().commit();
         } finally {
