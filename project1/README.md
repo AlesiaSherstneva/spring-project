@@ -1,8 +1,14 @@
 ![img.png](img.png)
 ![img_1.png](img_1.png)
 
-<p>Функционал реализован в полном объёме.<br>Использованные технологии: Java 11 SE, Apache Maven, Apache Tomcat, 
-JDBC, PostgreSQL, Spring Core, Spring MVC, Thymeleaf, HTML, CSS.</p>
+<hr/>
+
+<p>Функционал реализован в полном объёме.</p>
+<p>Приложение устанавливается на Tomcat-9, разворачивается в контекстном пути http://localhost:8080/library</p>
+<p>Использованные технологии: Java 11 SE, Apache Maven, Apache Tomcat, JDBC, PostgreSQL, Spring Core, Spring MVC, 
+Thymeleaf, HTML, CSS.</p>
+
+<hr/>
 
 <p><i>(*) Если gif-картинки не отображаются, обновите страницу, и они загрузятся.</i></p>
 
