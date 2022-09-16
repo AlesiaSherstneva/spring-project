@@ -1,5 +1,6 @@
 package com.udemy.springcourse;
 
+import com.udemy.springcourse.pojo.Passport;
 import com.udemy.springcourse.pojo.Person;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,7 +11,7 @@ public class App {
     public static void main(String[] args) {
         Configuration configuration = new Configuration()
                 .addAnnotatedClass(Person.class)
-                .addAnnotatedClass(Item.class);
+                .addAnnotatedClass(Passport.class);
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.getCurrentSession();
 

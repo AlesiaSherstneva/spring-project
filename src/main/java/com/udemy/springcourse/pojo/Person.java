@@ -20,6 +20,10 @@ public class Person {
     @Column(name = "age")
     private int age;
 
+    @OneToOne(mappedBy = "person")
+    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    private Passport passport;
+
     public Person() {
     }
 
