@@ -1,6 +1,5 @@
 package com.udemy.springcourse;
 
-import com.udemy.springcourse.pojo.Item;
 import com.udemy.springcourse.pojo.Person;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -19,12 +18,6 @@ public class App {
         try {
             session.beginTransaction();
 
-            Person person = new Person("Test cascading", 30);
-            person.addItem(new Item("Item 1"));
-            person.addItem(new Item("Item 2"));
-            person.addItem(new Item("Item 3"));
-
-            session.save(person);
 
             session.getTransaction().commit();
         } finally {
