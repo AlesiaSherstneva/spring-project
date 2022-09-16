@@ -21,7 +21,7 @@ public class Person {
     private int age;
 
     @OneToOne(mappedBy = "person")
-    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
+    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE})
     private Passport passport;
 
     public Person() {
