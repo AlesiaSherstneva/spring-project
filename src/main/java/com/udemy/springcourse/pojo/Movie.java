@@ -1,6 +1,7 @@
 package com.udemy.springcourse.pojo;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "Movie")
@@ -15,6 +16,9 @@ public class Movie {
 
     @Column(name = "year_of_production")
     private int yearOfProduction;
+
+    @ManyToMany(mappedBy = "movies")
+    private List<Actor> actors;
 
     public Movie() {
     }
@@ -42,6 +46,14 @@ public class Movie {
 
     public void setYearOfProduction(int yearOfProduction) {
         this.yearOfProduction = yearOfProduction;
+    }
+
+    public List<Actor> getActors() {
+        return actors;
+    }
+
+    public void setActors(List<Actor> actors) {
+        this.actors = actors;
     }
 
     @Override

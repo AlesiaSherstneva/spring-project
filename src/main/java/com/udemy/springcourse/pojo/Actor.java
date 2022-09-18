@@ -1,6 +1,7 @@
 package com.udemy.springcourse.pojo;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "Actor")
@@ -15,6 +16,15 @@ public class Actor {
 
     @Column(name = "age")
     private int age;
+
+    @Column
+    @ManyToMany
+    @JoinTable(
+            name = "Actor_Movie",
+            joinColumns = @JoinColumn(name = "actor_id"),
+            inverseJoinColumns = @JoinColumn(name = "movie_id")
+    )
+    private List<Movie> movies;
 
     public Actor() {
     }
@@ -42,6 +52,14 @@ public class Actor {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public List<Movie> getMovies() {
+        return movies;
+    }
+
+    public void setMovies(List<Movie> movies) {
+        this.movies = movies;
     }
 
     @Override
