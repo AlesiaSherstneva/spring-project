@@ -11,11 +11,7 @@ Spring подробно и не спеша. Повторить старое и, 
 
 ## project1
 
-> **Note**
-> Try to add note block
-> Another note string
-
-![project1-task.jpg](project1-task.jpg)
+![project1-task.jpg](project1/img.jpg)
 
 ---
 
@@ -30,16 +26,16 @@ Thymeleaf, HTML, CSS.
 
 Титульные страницы:
 
-![project1-img1.gif](project1-img1.gif)
+![project1-img1.gif](project1/img1.gif)
 
 Создание и редактирование читателя (с валидацией):
 
-![project1-img2.gif](project1-img2.gif)
+![project1-img2.gif](project1/img2.gif)
 
 <p>Создание и редактирование книги (с валидацией):</p>
 
-![project1-img3.gif](project1-img3.gif)
+![project1-img3.gif](project1/img3.gif)
 
 <p>Профиль читателя, профиль книги, освобождение книги при удалении читателя:</p>
 
-![project1-img4.gif](project1-img4.gif)
+![project1-img4.gif](project1/img4.gif)
