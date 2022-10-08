@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/library.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/table-left.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/books.css}"/>
+    <title>Книги</title>
+</head>
+<body>
+<div class="main">
+    <div class="list" th:each="book : ${books}">
+        <a th:href="@{/books/{id}(id=${book.getId()})}"
+           th:text="${book.getTitle()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()}">book</a>
+    </div>
+    <div class="list">
+        <a th:href="@{/books/new}"><b>Добавить книгу</b></a>
+    </div>
+    <div class="list">
+        <a th:href="@{/}">На главную страницу</a>
+    </div>
+</div>
+</body>
+</html>

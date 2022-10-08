@@ -1,0 +1,11 @@
+.main {
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.list {
+    margin-top: 10px;
+    margin-left: 50px;
+    margin-bottom: 0;
+    width: 450px;
+}

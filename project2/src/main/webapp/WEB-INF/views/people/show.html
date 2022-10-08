@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/library.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/table-left.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/head.css}"/>
+    <title>Читатели</title>
+</head>
+<body>
+<div class="main">
+    <div class="list" th:each="person : ${people}">
+        <a th:href="@{/people/{id}(id=${person.getId()})}"
+           th:text="${person.getName()} + ', ' + ${person.getYear()}">reader</a>
+    </div>
+    <div class="list">
+        <a th:href="@{/people/new}"><b>Добавить читателя</b></a>
+    </div>
+    <div class="list">
+        <a th:href="@{/}">На главную страницу</a>
+    </div>
+</div>
+</body>
+</html>
