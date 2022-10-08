@@ -1,52 +1,38 @@
 package com.udemy.springcourse.pojo;
 
 import com.udemy.springcourse.validators.CurrentYear;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.List;
 
 
-@SuppressWarnings("unused")
+@Entity
+@Table(name = "Person")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Person {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
 
     @Pattern(regexp = "([А-ЯЁ][а-яА-ЯёЁ\\-]+\\s){2}[А-ЯЁ][а-яё]+",
             message = "Должен быть формат \"Фамилия Имя Отчество\" на русском языке")
+    @Column(name = "name")
     private String name;
 
     @Min(value = 1900, message = "Год рождения должен быть больше 1900")
     @CurrentYear
+    @Column(name = "year")
     private int year;
 
-    public Person() {
-    }
-
-    public Person(int id, String name, int year) {
-        this.id = id;
-        this.name = name;
-        this.year = year;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
+    @OneToMany(mappedBy = "reader")
+    private List<Book> books;
 }
