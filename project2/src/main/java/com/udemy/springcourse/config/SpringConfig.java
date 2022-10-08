@@ -31,7 +31,7 @@ import java.util.Properties;
 @PropertySource("classpath:database.properties")
 @EnableWebMvc
 @EnableTransactionManagement
-@EnableJpaRepositories
+@EnableJpaRepositories("com.udemy.springcourse.repositories")
 public class SpringConfig implements WebMvcConfigurer {
     private final ApplicationContext context;
     private final Environment environment;
