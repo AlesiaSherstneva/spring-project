@@ -6,7 +6,10 @@ import com.udemy.springcourse.services.BookService;
 import com.udemy.springcourse.services.PeopleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/books")
@@ -39,7 +42,7 @@ public class BooksController {
         return "books/profile";
     }
 
-/*    @GetMapping("/new")
+    @GetMapping("/new")
     public String addBook(@ModelAttribute("book") Book book) {
         return "books/new";
     }
@@ -48,9 +51,9 @@ public class BooksController {
     public String createBook(@ModelAttribute("book") @Valid Book book,
                              BindingResult bindingResult) {
         if (bindingResult.hasErrors()) return "books/new";
-        bookDAO.save(book);
+        bookService.save(book);
         return "redirect:/books";
-    }*/
+    }
 
 /*    @GetMapping("/{id}/edit")
     public String editBook(@PathVariable("id") int id, Model model) {

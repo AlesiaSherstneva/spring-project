@@ -32,4 +32,8 @@ public class BookService {
     public List<Book> findByReader(Person reader) {
         return booksRepository.findByReader(reader);
     }
+
+    public void save(Book book) {
+        booksRepository.saveAndFlush(book);
+    }
 }

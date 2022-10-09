@@ -8,8 +8,10 @@ import com.udemy.springcourse.validators.UniquePersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -52,14 +54,14 @@ public class PeopleController {
         return "people/new";
     }
 
-/*    @PostMapping()
+    @PostMapping()
     public String createPerson(@ModelAttribute("person") @Valid Person person,
                                BindingResult bindingResult) {
         validator.validate(person, bindingResult);
         if (bindingResult.hasErrors()) return "people/new";
-        personDAO.save(person);
+        peopleService.save(person);
         return "redirect:/people";
-    }*/
+    }
 
 /*    @GetMapping("/{id}/edit")
     public String edit(@PathVariable("id") int id, Model model) {

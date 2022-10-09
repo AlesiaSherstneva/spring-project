@@ -28,4 +28,9 @@ public class PeopleService {
         Optional<Person> person = peopleRepository.findById(id);
         return person.orElse(null);
     }
+
+    @Transactional
+    public void save(Person person) {
+        peopleRepository.saveAndFlush(person);
+    }
 }
