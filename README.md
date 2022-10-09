@@ -19,7 +19,7 @@ Spring подробно и не спеша. Повторить старое и, 
 
 Приложение устанавливается на Tomcat-9, разворачивается в контекстном пути http://localhost:8080/library
 
-Использованные технологии: Java 11 SE, Apache Maven, Apache Tomcat, JDBC, PostgreSQL, Spring Core, Spring MVC, 
+Использованные технологии: Java 11 SE, Apache Maven, Apache Tomcat, JDBC, PostgreSQL, Spring Core, Spring MVC, Lombok,
 Thymeleaf, HTML, CSS.
 
 ---

@@ -1,11 +1,17 @@
 package com.udemy.springcourse.pojo;
 
 import com.udemy.springcourse.validators.CurrentYear;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.*;
 
-
-@SuppressWarnings("unused")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Person {
     private int id;
 
@@ -16,37 +22,4 @@ public class Person {
     @Min(value = 1900, message = "Год рождения должен быть больше 1900")
     @CurrentYear
     private int year;
-
-    public Person() {
-    }
-
-    public Person(int id, String name, int year) {
-        this.id = id;
-        this.name = name;
-        this.year = year;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public void setYear(int year) {
-        this.year = year;
-    }
 }
