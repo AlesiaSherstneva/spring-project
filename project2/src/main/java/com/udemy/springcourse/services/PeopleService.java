@@ -1,7 +1,6 @@
 package com.udemy.springcourse.services;
 
 import com.udemy.springcourse.pojo.Person;
-import com.udemy.springcourse.repositories.BooksRepository;
 import com.udemy.springcourse.repositories.PeopleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,13 +23,28 @@ public class PeopleService {
         return peopleRepository.findAll();
     }
 
-    public Person findOne(int id) {
+    public Person findOneById(int id) {
         Optional<Person> person = peopleRepository.findById(id);
         return person.orElse(null);
+    }
+
+    public Person findOneByName(String name) {
+        return peopleRepository.findByName(name);
     }
 
     @Transactional
     public void save(Person person) {
         peopleRepository.saveAndFlush(person);
+    }
+
+    @Transactional
+    public void update(int id, Person person) {
+        person.setId(id);
+        peopleRepository.saveAndFlush(person);
+    }
+
+    @Transactional
+    public void delete(int id) {
+        peopleRepository.deleteById(id);
     }
 }

@@ -12,8 +12,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -38,9 +36,9 @@ public class PeopleController {
 
     @GetMapping("/{id}")
     public String showPerson(@PathVariable("id") int id, Model model) {
-        Person person = peopleService.findOne(id);
+        Person person = peopleService.findOneById(id);
         List<Book> books = bookService.findByReader(person);
-        model.addAttribute("person", peopleService.findOne(id));
+        model.addAttribute("person", peopleService.findOneById(id));
         System.out.println(person.getName());
         System.out.println(books);
         if (!books.isEmpty()) {
@@ -63,25 +61,25 @@ public class PeopleController {
         return "redirect:/people";
     }
 
-/*    @GetMapping("/{id}/edit")
+    @GetMapping("/{id}/edit")
     public String edit(@PathVariable("id") int id, Model model) {
-        model.addAttribute("person", personDAO.showPerson(id));
+        model.addAttribute("person", peopleService.findOneById(id));
         return "people/edit";
-    }*/
+    }
 
-/*    @PatchMapping("/{id}")
+    @PatchMapping("/{id}")
     public String update(@ModelAttribute("person") @Valid Person person,
                          BindingResult bindingResult,
                          @PathVariable("id") int id) {
         validator.validate(person, bindingResult);
         if (bindingResult.hasErrors()) return "people/edit";
-        personDAO.update(id, person);
+        peopleService.update(id, person);
         return "redirect:/people";
-    }*/
+    }
 
-/*    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}")
     public String deletePerson(@PathVariable("id") int id) {
-        personDAO.delete(id);
+        peopleService.delete(id);
         return "redirect:/people";
-    }*/
+    }
 }

@@ -32,7 +32,7 @@ public class BooksController {
     @GetMapping("/{id}")
     public String showBook(@PathVariable("id") int id, Model model,
                            @ModelAttribute("person") Person person) {
-        Book book = bookService.findOne(id);
+        Book book = bookService.findOneById(id);
         model.addAttribute("book", book);
         if (book.getReader() != null) {
             model.addAttribute("reader", book.getReader());
@@ -55,39 +55,42 @@ public class BooksController {
         return "redirect:/books";
     }
 
-/*    @GetMapping("/{id}/edit")
+    @GetMapping("/{id}/edit")
     public String editBook(@PathVariable("id") int id, Model model) {
-        model.addAttribute("book", bookDAO.showBook(id));
+        model.addAttribute("book", bookService.findOneById(id));
         return "books/edit";
-    }*/
+    }
 
-/*    @PatchMapping("/{id}")
+    @PatchMapping("/{id}")
     public String updateBook(@ModelAttribute("book") @Valid Book book,
                              BindingResult bindingResult,
                              @PathVariable("id") int id) {
         if (bindingResult.hasErrors()) return "books/edit";
-        bookDAO.update(id, book);
+        book.setReader(bookService.findOneById(id).getReader());
+        bookService.update(id, book);
         return "redirect:/books";
-    }*/
+    }
 
-/*    @PatchMapping("/{id}/person")
+    @PatchMapping("/{id}/person")
     public String addBookToPerson(@ModelAttribute("person") Person person,
                                   @PathVariable("id") int id) {
-        Book book = bookDAO.showBook(id);
-        book.setPerson_id(person.getId());
-        bookDAO.update(id, book);
+        Book book = bookService.findOneById(id);
+        book.setReader(person);
+        bookService.update(id, book);
         return "redirect:/books/{id}";
-    }*/
+    }
 
-/*    @PatchMapping("/{id}/free")
+    @PatchMapping("/{id}/free")
     public String freeBook(@PathVariable("id") int id) {
-        bookDAO.free(id);
+        Book book = bookService.findOneById(id);
+        book.setReader(null);
+        bookService.update(id, book);
         return "redirect:/books/{id}";
-    }*/
+    }
 
-/*    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}")
     public String deleteBook(@PathVariable("id") int id) {
-        bookDAO.delete(id);
+        bookService.delete(id);
         return "redirect:/books";
-    }*/
+    }
 }
