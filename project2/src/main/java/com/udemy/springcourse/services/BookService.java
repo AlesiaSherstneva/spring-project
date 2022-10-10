@@ -4,6 +4,8 @@ import com.udemy.springcourse.pojo.Book;
 import com.udemy.springcourse.pojo.Person;
 import com.udemy.springcourse.repositories.BooksRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,18 @@ public class BookService {
 
     public List<Book> findAll() {
         return booksRepository.findAll();
+    }
+
+    public List<Book> findAndSortByYear() {
+        return booksRepository.findAll(Sort.by("year"));
+    }
+
+    public List<Book> findAndPage(int page, int itemsOnPage) {
+        return booksRepository.findAll(PageRequest.of(page, itemsOnPage)).getContent();
+    }
+
+    public List<Book> findAndPageAndSortByYear(int page, int itemsOnPage) {
+        return booksRepository.findAll(PageRequest.of(page, itemsOnPage, Sort.by("year"))).getContent();
     }
 
     public Book findOneById(int id) {

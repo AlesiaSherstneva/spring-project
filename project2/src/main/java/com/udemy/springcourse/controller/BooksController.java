@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 @RequestMapping("/books")
@@ -24,8 +25,25 @@ public class BooksController {
 
 
     @GetMapping
-    public String showBooks(Model model) {
-        model.addAttribute("books", bookService.findAll());
+    public String showBooks(@RequestParam(required = false, defaultValue = "0") int page,
+                            @RequestParam(required = false, defaultValue = "0") int booksPerPage,
+                            @RequestParam(required = false, defaultValue = "false") boolean sortByYear,
+                            Model model) {
+        model.addAttribute("page", page);
+        model.addAttribute("booksPerPage", booksPerPage);
+        model.addAttribute("sortByYear", sortByYear);
+
+        List<Book> books;
+        if(page != 0 && booksPerPage != 0) {
+            books = sortByYear
+                    ? bookService.findAndPageAndSortByYear(page, booksPerPage)
+                    : bookService.findAndPage(page, booksPerPage);
+        } else if (page == 0 && booksPerPage == 0 && sortByYear){
+            books = bookService.findAndSortByYear();
+        } else {
+            books = bookService.findAll();
+        }
+        model.addAttribute("books", books);
         return "books/show";
     }
 
