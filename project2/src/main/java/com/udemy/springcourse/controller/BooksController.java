@@ -34,11 +34,11 @@ public class BooksController {
         model.addAttribute("sortByYear", sortByYear);
 
         List<Book> books;
-        if(page != 0 && booksPerPage != 0) {
+        if (page != 0 && booksPerPage != 0) {
             books = sortByYear
                     ? bookService.findAndPageAndSortByYear(page, booksPerPage)
                     : bookService.findAndPage(page, booksPerPage);
-        } else if (page == 0 && booksPerPage == 0 && sortByYear){
+        } else if (page == 0 && booksPerPage == 0 && sortByYear) {
             books = bookService.findAndSortByYear();
         } else {
             books = bookService.findAll();
@@ -104,6 +104,20 @@ public class BooksController {
         book.setReader(null);
         bookService.update(id, book);
         return "redirect:/books/{id}";
+    }
+
+    @GetMapping("/search")
+    public String searchBook(@RequestParam(required = false, defaultValue = "") String startString,
+                             Model model) {
+        model.addAttribute("startString", startString);
+        List<Book> books = bookService.searchBooks(startString);
+        if (!startString.isEmpty()) {
+            model.addAttribute("books", books);
+        }
+        if (books.isEmpty()) {
+            model.addAttribute("noBooks", "Книг не найдено");
+        }
+        return "books/search";
     }
 
     @DeleteMapping("/{id}")

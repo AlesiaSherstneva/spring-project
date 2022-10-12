@@ -47,6 +47,10 @@ public class BookService {
         return booksRepository.findByReader(reader);
     }
 
+    public List<Book> searchBooks(String startString) {
+        return booksRepository.findByTitleStartingWith(startString);
+    }
+
     @Transactional
     public void save(Book book) {
         booksRepository.save(book);
