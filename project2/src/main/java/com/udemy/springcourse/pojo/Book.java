@@ -9,6 +9,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
+import java.util.Date;
 
 @Entity
 @Table(name = "Book")
@@ -37,4 +38,8 @@ public class Book {
     @Min(value = 1445, message = "Год издания должен быть больше 1445")
     @CurrentYear
     private int year;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "taken_at")
+    private Date takenAt;
 }

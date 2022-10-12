@@ -18,7 +18,8 @@ CREATE TABLE Book (
     person_id INT REFERENCES Person(id) ON DELETE SET NULL,
     title VARCHAR(100) NOT NULL,
     author VARCHAR(250) NOT NULL,
-    year INT NOT NULL CHECK ( year > 1445 AND year <= EXTRACT(year FROM now()))
+    year INT NOT NULL CHECK ( year > 1445 AND year <= EXTRACT(year FROM now())),
+    taken_at TIMESTAMP
     );
 
 INSERT INTO Book (title, author, year)
