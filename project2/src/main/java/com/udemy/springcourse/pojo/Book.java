@@ -26,7 +26,7 @@ public class Book {
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person reader;
 
-    @Pattern(regexp = "[0-9А-ЯЁ][0-9а-яА-ЯёЁ\\-\\s]+",
+    @Pattern(regexp = "[0-9А-ЯЁ][0-9a-zA-Zа-яА-ЯёЁ\\-\\s]+",
             message = "Должен быть формат \"Название\" на русском языке")
     private String title;
 

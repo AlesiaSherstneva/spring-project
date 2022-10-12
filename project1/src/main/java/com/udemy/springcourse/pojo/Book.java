@@ -17,7 +17,7 @@ public class Book {
     private int id;
     private Integer person_id;
 
-    @Pattern(regexp = "[0-9А-ЯЁ][0-9а-яА-ЯёЁ\\-\\s]+",
+    @Pattern(regexp = "[0-9А-ЯЁ][0-9a-zA-Zа-яА-ЯёЁ\\-\\s]+",
             message = "Должен быть формат \"Название\" на русском языке")
     private String title;
 
