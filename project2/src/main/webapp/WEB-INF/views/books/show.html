@@ -5,6 +5,8 @@
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/library.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/table-left.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/resources/css/books.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/frame.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/queries.css}"/>
     <title>Книги</title>
 </head>
 <body>
@@ -17,7 +19,32 @@
         <a th:href="@{/books/new}"><b>Добавить книгу</b></a>
     </div>
     <div class="list">
+        <a th:href="@{/books/search}"><b>Найти книгу</b></a>
+    </div>
+    <div class="list">
         <a th:href="@{/}">На главную страницу</a>
+    </div>
+    <div class="break"></div>
+    <div class="frame queries">
+        <form th:method="GET" th:action="@{/books}">
+            <label for="page">Номер страницы:</label>
+            <input th:type="text" id="page" name="page" th:size="5" pattern="\d+" title="Введите цифру!"/>
+            <br>
+            <label for="booksPerPage">Количество книг на странице:</label>
+            <input th:type="text" id="booksPerPage" name="booksPerPage" th:size="5"/>
+            <br>
+            <label for="sortByYear">Сортировать по году:</label>
+            <select th:type="text" id="sortByYear" name="sortByYear">
+                <option th:value="true" th:text="Да"></option>
+                <option th:value="false" th:text="Нет"></option>
+            </select>
+            <input type="submit" class="button" value="Разбить на страницы">
+        </form>
+        <hr/>
+        <a style="text-decoration: none"
+           th:href="@{/books?sortByYear=true}" class="button">Сортировать по году без разбиения</a>
+        <a style="text-decoration: none"
+           th:href="@{/books}" class="button">Убрать сортировку и разбиение</a>
     </div>
 </div>
 </body>
