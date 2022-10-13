@@ -9,6 +9,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -42,4 +44,11 @@ public class Book {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "taken_at")
     private Date takenAt;
+
+    @Transient
+    private boolean isOverdue;
+
+    public boolean isOverdue() {
+        return (Timestamp.valueOf(LocalDateTime.now()).getTime() - takenAt.getTime()) / 86400000 > 10;
+    }
 }
