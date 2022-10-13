@@ -48,7 +48,7 @@ public class BookService {
     }
 
     public List<Book> searchBooks(String startString) {
-        return booksRepository.findByTitleStartingWith(startString);
+        return booksRepository.findByTitleStartingWithIgnoreCase(startString);
     }
 
     @Transactional
