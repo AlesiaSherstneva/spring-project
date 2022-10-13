@@ -25,10 +25,11 @@ public class BooksController {
         this.bookService = bookService;
     }
 
+    // паджинация с нулевой страницы была указана в ТЗ, поэтому значения страниц по умолчанию -1
 
     @GetMapping
-    public String showBooks(@RequestParam(required = false, defaultValue = "0") int page,
-                            @RequestParam(required = false, defaultValue = "0") int booksPerPage,
+    public String showBooks(@RequestParam(required = false, defaultValue = "-1") int page,
+                            @RequestParam(required = false, defaultValue = "-1") int booksPerPage,
                             @RequestParam(required = false, defaultValue = "false") boolean sortByYear,
                             Model model) {
         model.addAttribute("page", page);
@@ -36,11 +37,11 @@ public class BooksController {
         model.addAttribute("sortByYear", sortByYear);
 
         List<Book> books;
-        if (page != 0 && booksPerPage != 0) {
+        if (page != -1 && booksPerPage != -1) {
             books = sortByYear
                     ? bookService.findAndPageAndSortByYear(page, booksPerPage)
                     : bookService.findAndPage(page, booksPerPage);
-        } else if (page == 0 && booksPerPage == 0 && sortByYear) {
+        } else if (page == -1 && booksPerPage == -1 && sortByYear) {
             books = bookService.findAndSortByYear();
         } else {
             books = bookService.findAll();
