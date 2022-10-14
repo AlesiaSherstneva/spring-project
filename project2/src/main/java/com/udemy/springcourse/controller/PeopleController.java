@@ -38,9 +38,7 @@ public class PeopleController {
     public String showPerson(@PathVariable("id") int id, Model model) {
         Person person = peopleService.findOneById(id);
         List<Book> books = bookService.findByReader(person);
-        model.addAttribute("person", peopleService.findOneById(id));
-        System.out.println(person.getName());
-        System.out.println(books);
+        model.addAttribute("person", person);
         if (!books.isEmpty()) {
             model.addAttribute("books", books);
         }

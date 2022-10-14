@@ -28,13 +28,14 @@
     <div class="frame queries">
         <form th:method="GET" th:action="@{/books}">
             <label for="page">Номер страницы:</label>
-            <input th:type="text" id="page" name="page" th:size="5"/>
+            <input th:type="text" id="page" name="page" th:size="2"/>
             <br>
             <label for="books_per_page">Количество книг на странице:</label>
-            <input th:type="text" id="books_per_page" name="books_per_page" th:size="5"/>
+            <input th:type="text" id="books_per_page" name="books_per_page" th:size="2"/>
             <br>
             <label for="sort_by_year">Сортировать по году:</label>
             <select th:type="text" id="sort_by_year" name="sort_by_year">
+                <option disabled selected value>-----</option>
                 <option th:value="true" th:text="Да"></option>
                 <option th:value="false" th:text="Нет"></option>
             </select>
