@@ -9,8 +9,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -49,6 +47,6 @@ public class Book {
     private boolean isExpired;
 
     public boolean isExpired() {
-        return (Timestamp.valueOf(LocalDateTime.now()).getTime() - takenAt.getTime()) / 86400000 > 10;
+        return (new Date().getTime() - takenAt.getTime()) / 86400000 > 10;
     }
 }
