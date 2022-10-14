@@ -34,13 +34,13 @@ public class PeopleService {
 
     @Transactional
     public void save(Person person) {
-        peopleRepository.saveAndFlush(person);
+        peopleRepository.save(person);
     }
 
     @Transactional
     public void update(int id, Person person) {
         person.setId(id);
-        peopleRepository.saveAndFlush(person);
+        peopleRepository.save(person);
     }
 
     @Transactional
