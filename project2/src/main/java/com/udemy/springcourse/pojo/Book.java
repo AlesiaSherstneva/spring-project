@@ -46,9 +46,9 @@ public class Book {
     private Date takenAt;
 
     @Transient
-    private boolean isOverdue;
+    private boolean isExpired;
 
-    public boolean isOverdue() {
+    public boolean isExpired() {
         return (Timestamp.valueOf(LocalDateTime.now()).getTime() - takenAt.getTime()) / 86400000 > 10;
     }
 }

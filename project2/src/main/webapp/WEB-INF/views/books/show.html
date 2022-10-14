@@ -28,7 +28,7 @@
     <div class="frame queries">
         <form th:method="GET" th:action="@{/books}">
             <label for="page">Номер страницы:</label>
-            <input th:type="text" id="page" name="page" th:size="5" pattern="\d+" title="Введите цифру!"/>
+            <input th:type="text" id="page" name="page" th:size="5"/>
             <br>
             <label for="booksPerPage">Количество книг на странице:</label>
             <input th:type="text" id="booksPerPage" name="booksPerPage" th:size="5"/>

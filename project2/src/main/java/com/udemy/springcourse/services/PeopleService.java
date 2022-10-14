@@ -29,7 +29,7 @@ public class PeopleService {
     }
 
     public Person findOneByName(String name) {
-        return peopleRepository.findByName(name);
+        return peopleRepository.findByName(name).orElse(null);
     }
 
     @Transactional
