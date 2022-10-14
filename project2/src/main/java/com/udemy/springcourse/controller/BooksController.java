@@ -28,14 +28,10 @@ public class BooksController {
     // паджинация с нулевой страницы была указана в ТЗ, поэтому значения страниц по умолчанию -1
 
     @GetMapping
-    public String showBooks(@RequestParam(required = false, defaultValue = "-1") int page,
-                            @RequestParam(required = false, defaultValue = "-1") int booksPerPage,
-                            @RequestParam(required = false, defaultValue = "false") boolean sortByYear,
+    public String showBooks(@RequestParam(value = "page", required = false, defaultValue = "-1") int page,
+                            @RequestParam(value = "books_per_page", required = false, defaultValue = "-1") int booksPerPage,
+                            @RequestParam(value = "sort_by_year", required = false, defaultValue = "false") boolean sortByYear,
                             Model model) {
-        model.addAttribute("page", page);
-        model.addAttribute("booksPerPage", booksPerPage);
-        model.addAttribute("sortByYear", sortByYear);
-
         List<Book> books;
         if (page != -1 && booksPerPage != -1) {
             books = sortByYear
