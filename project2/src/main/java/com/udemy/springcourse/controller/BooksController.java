@@ -10,7 +10,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -82,7 +81,6 @@ public class BooksController {
                              BindingResult bindingResult,
                              @PathVariable("id") int id) {
         if (bindingResult.hasErrors()) return "books/edit";
-        book.setReader(bookService.findOneById(id).getReader());
         bookService.update(id, book);
         return "redirect:/books";
     }
@@ -90,19 +88,13 @@ public class BooksController {
     @PatchMapping("/{id}/person")
     public String addBookToPerson(@ModelAttribute("person") Person person,
                                   @PathVariable("id") int id) {
-        Book book = bookService.findOneById(id);
-        book.setReader(person);
-        book.setTakenAt(new Date());
-        bookService.update(id, book);
+        bookService.addBookToPerson(person, id);
         return "redirect:/books/{id}";
     }
 
     @PatchMapping("/{id}/free")
     public String freeBook(@PathVariable("id") int id) {
-        Book book = bookService.findOneById(id);
-        book.setReader(null);
-        book.setTakenAt(null);
-        bookService.update(id, book);
+        bookService.freeBook(id);
         return "redirect:/books/{id}";
     }
 

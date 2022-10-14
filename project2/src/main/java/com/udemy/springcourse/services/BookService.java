@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,10 +48,6 @@ public class BookService {
         return booksRepository.findByReader(reader);
     }
 
-    public List<Book> searchBooks(String startString) {
-        return booksRepository.findByTitleStartingWithIgnoreCase(startString);
-    }
-
     @Transactional
     public void save(Book book) {
         booksRepository.save(book);
@@ -58,8 +55,37 @@ public class BookService {
 
     @Transactional
     public void update(int id, Book book) {
+        Book bookInBase = booksRepository.findById(id).orElse(null);
+        if (bookInBase != null) {
+            book.setReader(bookInBase.getReader());
+            book.setTakenAt(bookInBase.getTakenAt());
+        }
         book.setId(id);
         booksRepository.save(book);
+    }
+
+    @Transactional
+    public void addBookToPerson(Person person, int id) {
+        Book book = booksRepository.findById(id).orElse(null);
+        if (book != null) {
+            book.setReader(person);
+            book.setTakenAt(new Date());
+            booksRepository.save(book);
+        }
+    }
+
+    @Transactional
+    public void freeBook(int id) {
+        Book book = booksRepository.findById(id).orElse(null);
+        if (book != null) {
+            book.setReader(null);
+            book.setTakenAt(null);
+            booksRepository.save(book);
+        }
+    }
+
+    public List<Book> searchBooks(String startString) {
+        return booksRepository.findByTitleStartingWithIgnoreCase(startString);
     }
 
     @Transactional
