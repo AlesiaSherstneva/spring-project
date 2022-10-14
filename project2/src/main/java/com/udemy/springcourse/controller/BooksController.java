@@ -110,12 +110,8 @@ public class BooksController {
     public String searchBook(@RequestParam(required = false, defaultValue = "") String startString,
                              Model model) {
         model.addAttribute("startString", startString);
-        List<Book> books = bookService.searchBooks(startString);
         if (!startString.isEmpty()) {
-            model.addAttribute("books", books);
-        }
-        if (books.isEmpty()) {
-            model.addAttribute("noBooks", "Книг не найдено");
+            model.addAttribute("books", bookService.searchBooks(startString));
         }
         return "books/search";
     }

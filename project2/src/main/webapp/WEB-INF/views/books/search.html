@@ -9,13 +9,18 @@
 </head>
 <body>
 <div class="frame">
-    <form th:method="GET" th:action="@{/books/search?startString=*{startString}}">
+    <form th:method="GET" th:action="@{/books/search}">
         <label for="startString">Введите поисковый запрос:</label>
         <input th:type="text" id="startString" th:name="startString">
         <br/>
         <input type="submit" class="button" value="Искать книгу">
     </form>
     <div th:if="${books}">
+        <div th:if="${books.isEmpty()}">
+            <br>
+            <p>Книг не найдено</p>
+            <br>
+        </div>
         <div th:each="book : ${books}">
             <br>
             <p th:text="${book.getTitle()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()}">book</p>
@@ -27,11 +32,6 @@
             </div>
             <br>
         </div>
-    </div>
-    <div th:if="${noBooks}">
-        <br>
-        <p>Книг не найдено</p>
-        <br>
     </div>
     <hr/>
     <div class="btn-group">
