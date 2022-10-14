@@ -10,8 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -93,7 +92,7 @@ public class BooksController {
                                   @PathVariable("id") int id) {
         Book book = bookService.findOneById(id);
         book.setReader(person);
-        book.setTakenAt(Timestamp.valueOf(LocalDateTime.now()));
+        book.setTakenAt(new Date());
         bookService.update(id, book);
         return "redirect:/books/{id}";
     }
