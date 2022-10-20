@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/library.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/books.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/frame.css}"/>
+    <title>Поиск книги</title>
+</head>
+<body>
+<div class="frame">
+    <form th:method="GET" th:action="@{/books/search}">
+        <label for="startString">Введите поисковый запрос:</label>
+        <input th:type="text" id="startString" th:name="startString">
+        <br/>
+        <input type="submit" class="button" value="Искать книгу">
+    </form>
+    <div th:if="${books}">
+        <div th:if="${books.isEmpty()}">
+            <br>
+            <p>Книг не найдено</p>
+            <br>
+        </div>
+        <div th:each="book : ${books}">
+            <br>
+            <p th:text="${book.getTitle()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()}">book</p>
+            <div th:if="${book.getReader()}">
+                <p th:text="'Книга сейчас у: ' + ${book.getReader().getName()}">reader</p>
+            </div>
+            <div th:unless="${book.getReader()}">
+                <p th:text="'Книга свободна'">free</p>
+            </div>
+            <br>
+        </div>
+    </div>
+    <hr/>
+    <div class="btn-group">
+        <div class="button">
+            <a th:href="@{/people}">Все читатели</a>
+        </div>
+        <div class="button">
+            <a th:href="@{/books}">Все книги</a>
+        </div>
+        <div class="button">
+            <a th:href="@{/}">На главную</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

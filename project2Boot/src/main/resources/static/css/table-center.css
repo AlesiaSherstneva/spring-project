@@ -1,0 +1,10 @@
+.main {
+    justify-content: center;
+    align-items: center;
+}
+
+.list {
+    margin-right: 100px;
+    margin-bottom: 10px;
+    width: 250px;
+}

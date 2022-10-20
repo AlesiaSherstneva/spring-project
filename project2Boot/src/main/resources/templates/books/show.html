@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/library.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/table-left.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/books.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/frame.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/queries.css}"/>
+    <title>Книги</title>
+</head>
+<body>
+<div class="main">
+    <div class="list" th:each="book : ${books}">
+        <a th:href="@{/books/{id}(id=${book.getId()})}"
+           th:text="${book.getTitle()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()}">book</a>
+    </div>
+    <div class="list">
+        <a th:href="@{/books/new}"><b>Добавить книгу</b></a>
+    </div>
+    <div class="list">
+        <a th:href="@{/books/search}"><b>Найти книгу</b></a>
+    </div>
+    <div class="list">
+        <a th:href="@{/}">На главную страницу</a>
+    </div>
+    <div class="break"></div>
+    <div class="frame queries">
+        <form th:method="GET" th:action="@{/books}">
+            <label for="page">Номер страницы:</label>
+            <input th:type="text" id="page" name="page" th:size="2"/>
+            <br>
+            <label for="books_per_page">Количество книг на странице:</label>
+            <input th:type="text" id="books_per_page" name="books_per_page" th:size="2"/>
+            <br>
+            <label for="sort_by_year">Сортировать по году:</label>
+            <select th:type="text" id="sort_by_year" name="sort_by_year">
+                <option disabled selected value>-----</option>
+                <option th:value="true" th:text="Да"></option>
+                <option th:value="false" th:text="Нет"></option>
+            </select>
+            <input type="submit" class="button" value="Разбить на страницы">
+        </form>
+        <hr/>
+        <a style="text-decoration: none"
+           th:href="@{/books}" class="button">Убрать сортировку и разбиение</a>
+    </div>
+</div>
+</body>
+</html>

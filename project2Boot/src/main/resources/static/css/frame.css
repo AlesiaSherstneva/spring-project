@@ -1,0 +1,9 @@
+.frame {
+    max-width: 450px;
+    margin: 20px 50px;
+    padding: 20px;
+    background: whitesmoke;
+    color: black;
+    border: 10px solid transparent;
+    border-image: 10 repeating-linear-gradient(135deg, gold, goldenrod 10px, transparent 50px, transparent 20px);
+}

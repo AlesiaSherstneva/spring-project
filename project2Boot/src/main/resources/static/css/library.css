@@ -1,0 +1,65 @@
+body {
+    font-family: Verdana, sans-serif;
+}
+
+A {
+    color: black;
+}
+
+A:visited {
+    color: black;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 100vh;
+}
+
+.break {
+    flex-basis: 100%;
+    height: 0;
+}
+
+.list {
+    height: 40px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 1.1rem;
+    background: goldenrod;
+    letter-spacing: 0.1rem;
+    box-shadow: 0 0 8px rgb(177, 177, 177);
+    transform: scale(1);
+    transition: all 0.2s;
+}
+
+.list:hover, .btn-group .button:hover, .button:hover {
+    background: gold;
+    transform: scale(1.05);
+}
+
+.btn-group .button, .button {
+    background-color: goldenrod;
+    border: none;
+    color: black;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    padding: 10px 20px;
+    text-align: center;
+    display: inline-block;
+    font-size: 15px;
+    transform: scale(1);
+    transition: all 0.2s;
+}
+
+.error {
+    color: red;
+}
