@@ -1,10 +1,10 @@
-package com.udemy.springcourse;
+package com.udemy.springcourse.project2Boot;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SpringBootAppApplicationTests {
+class Project2BootApplicationTests {
 
 	@Test
 	void contextLoads() {
