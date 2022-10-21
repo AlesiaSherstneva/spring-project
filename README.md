@@ -72,3 +72,12 @@ Spring Data, Lombok, Thymeleaf, HTML, CSS.
 
 ![project2-img3.gif](project2/img3.gif)
 
+### project2.5
+
+В папке project2Boot находится проект №2, переписанный на Spring Boot.
+
+Приложение собирается в jar-файл, запускается из метода main, разворачивается в контекстном пути 
+http://localhost:8080/library
+
+Также возможен запуск из командной строки. Файл project2Boot.jar в папке target: java -jar project2Boot.jar 
+
