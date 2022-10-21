@@ -2,31 +2,31 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/library.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/table-left.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/books.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/frame.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/queries.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/library.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/table-left.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/books.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/frame.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/queries.css}"/>
     <title>Книги</title>
 </head>
 <body>
 <div class="main">
     <div class="list" th:each="book : ${books}">
-        <a th:href="@{/books/{id}(id=${book.getId()})}"
+        <a th:href="@{/library/books/{id}(id=${book.getId()})}"
            th:text="${book.getTitle()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()}">book</a>
     </div>
     <div class="list">
-        <a th:href="@{/books/new}"><b>Добавить книгу</b></a>
+        <a th:href="@{/library/books/new}"><b>Добавить книгу</b></a>
     </div>
     <div class="list">
-        <a th:href="@{/books/search}"><b>Найти книгу</b></a>
+        <a th:href="@{/library/books/search}"><b>Найти книгу</b></a>
     </div>
     <div class="list">
-        <a th:href="@{/}">На главную страницу</a>
+        <a th:href="@{/library}">На главную страницу</a>
     </div>
     <div class="break"></div>
     <div class="frame queries">
-        <form th:method="GET" th:action="@{/books}">
+        <form th:method="GET" th:action="@{/library/books}">
             <label for="page">Номер страницы:</label>
             <input th:type="text" id="page" name="page" th:size="2"/>
             <br>
@@ -43,7 +43,7 @@
         </form>
         <hr/>
         <a style="text-decoration: none"
-           th:href="@{/books}" class="button">Убрать сортировку и разбиение</a>
+           th:href="@{/library/books}" class="button">Убрать сортировку и разбиение</a>
     </div>
 </div>
 </body>

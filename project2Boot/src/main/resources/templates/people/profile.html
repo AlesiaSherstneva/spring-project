@@ -2,9 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/library.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/head.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/frame.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/library.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/head.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/frame.css}"/>
     <title>Профиль читателя</title>
 </head>
 <body>
@@ -24,22 +24,22 @@
     </div>
     <br>
     <hr/>
-    <form th:method="GET" th:action="@{/people/{id}/edit(id=${person.getId()})}">
+    <form th:method="GET" th:action="@{/library/people/{id}/edit(id=${person.getId()})}">
         <input type="submit" class="button" value="Редактировать читателя"/>
     </form>
-    <form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
+    <form th:method="DELETE" th:action="@{/library/people/{id}(id=${person.getId()})}">
         <input type="submit" class="button" value="Удалить читателя"/>
     </form>
     <hr/>
     <div class="btn-group">
         <div class="button">
-            <a th:href="@{/people}">Все читатели</a>
+            <a th:href="@{/library/people}">Все читатели</a>
         </div>
         <div class="button">
-            <a th:href="@{/books}">Все книги</a>
+            <a th:href="@{/library/books}">Все книги</a>
         </div>
         <div class="button">
-            <a th:href="@{/}">На главную</a>
+            <a th:href="@{/library}">На главную</a>
         </div>
     </div>
 </div>

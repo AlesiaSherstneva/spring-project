@@ -2,9 +2,9 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/library.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/books.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/frame.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/library.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/books.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/frame.css}"/>
     <title>Профиль читателя</title>
 </head>
 <body>
@@ -13,13 +13,13 @@
     <br>
     <div th:if="${reader}">
         <p th:text="'Книга сейчас у: ' + ${reader.getName()}"></p>
-        <form th:method="PATCH" th:action="@{/books/{id}/free(id=${book.getId()})}">
+        <form th:method="PATCH" th:action="@{/library/books/{id}/free(id=${book.getId()})}">
             <input type="submit" class="button" value="Освободить книгу"/>
         </form>
     </div>
     <div th:unless="${reader}">
         <p>Эта книга свободна. Кому назначить её?</p>
-        <form th:method="PATCH" th:action="@{/books/{id}/person(id=${book.getId()})}">
+        <form th:method="PATCH" th:action="@{/library/books/{id}/person(id=${book.getId()})}">
             <label for="person">Выберите читателя</label>
             <select th:object="${person}" th:field="*{id}" id="person">
                 <option th:each="person : ${people}" th:value="${person.getId()}"
@@ -29,22 +29,22 @@
         </form>
     </div>
     <hr/>
-    <form th:method="GET" th:action="@{/books/{id}/edit(id=${book.getId()})}">
+    <form th:method="GET" th:action="@{/library/books/{id}/edit(id=${book.getId()})}">
         <input type="submit" class="button" value="Редактировать книгу"/>
     </form>
-    <form th:method="DELETE" th:action="@{/books/{id}(id=${book.getId()})}">
+    <form th:method="DELETE" th:action="@{/library/books/{id}(id=${book.getId()})}">
         <input type="submit" class="button" value="Удалить книгу"/>
     </form>
     <hr/>
     <div class="btn-group">
         <div class="button">
-            <a th:href="@{/people}">Все читатели</a>
+            <a th:href="@{/library/people}">Все читатели</a>
         </div>
         <div class="button">
-            <a th:href="@{/books}">Все книги</a>
+            <a th:href="@{/library/books}">Все книги</a>
         </div>
         <div class="button">
-            <a th:href="@{/}">На главную</a>
+            <a th:href="@{/library}">На главную</a>
         </div>
     </div>
 </div>

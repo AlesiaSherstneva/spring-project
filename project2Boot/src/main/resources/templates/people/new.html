@@ -2,14 +2,14 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/library.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/head.css}"/>
-    <link rel="stylesheet" type="text/css" th:href="@{/resources/css/frame.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/library.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/head.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/frame.css}"/>
     <title>Новый читатель</title>
 </head>
 <body>
 <div class="frame">
-    <form th:method="POST" th:action="@{/people}" th:object="${person}">
+    <form th:method="POST" th:action="@{/library/people}" th:object="${person}">
         <label for="name">Введите ФИО полностью:</label>
         <input type="text" th:field="*{name}" id="name">
         <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</div>
@@ -23,13 +23,13 @@
     <hr/>
     <div class="btn-group">
         <div class="button">
-            <a th:href="@{/people}">Все читатели</a>
+            <a th:href="@{/library/people}">Все читатели</a>
         </div>
         <div class="button">
-            <a th:href="@{/books}">Все книги</a>
+            <a th:href="@{/library/books}">Все книги</a>
         </div>
         <div class="button">
-            <a th:href="@{/}">На главную</a>
+            <a th:href="@{/library}">На главную</a>
         </div>
     </div>
 </div>
