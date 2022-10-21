@@ -15,7 +15,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@RequestMapping("/people")
+@RequestMapping("/library/people")
 public class PeopleController {
     private final PeopleService peopleService;
     private final BookService bookService;
@@ -56,7 +56,7 @@ public class PeopleController {
         validator.validate(person, bindingResult);
         if (bindingResult.hasErrors()) return "people/new";
         peopleService.save(person);
-        return "redirect:/people";
+        return "redirect:/library/people";
     }
 
     @GetMapping("/{id}/edit")
@@ -72,12 +72,12 @@ public class PeopleController {
         validator.validate(person, bindingResult);
         if (bindingResult.hasErrors()) return "people/edit";
         peopleService.update(id, person);
-        return "redirect:/people";
+        return "redirect:/library/people";
     }
 
     @DeleteMapping("/{id}")
     public String deletePerson(@PathVariable("id") int id) {
         peopleService.delete(id);
-        return "redirect:/people";
+        return "redirect:/library/people";
     }
 }

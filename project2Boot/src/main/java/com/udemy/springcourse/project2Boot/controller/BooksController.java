@@ -12,8 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+@SuppressWarnings("SpringMVCViewInspection")
 @Controller
-@RequestMapping("/books")
+@RequestMapping("/library/books")
 public class BooksController {
     private final PeopleService peopleService;
     private final BookService bookService;
@@ -65,7 +66,7 @@ public class BooksController {
                              BindingResult bindingResult) {
         if (bindingResult.hasErrors()) return "books/new";
         bookService.save(book);
-        return "redirect:/books";
+        return "redirect:/library/books";
     }
 
     @GetMapping("/{id}/edit")
@@ -80,20 +81,20 @@ public class BooksController {
                              @PathVariable("id") int id) {
         if (bindingResult.hasErrors()) return "books/edit";
         bookService.update(id, book);
-        return "redirect:/books";
+        return "redirect:/library/books";
     }
 
     @PatchMapping("/{id}/person")
     public String addBookToPerson(@ModelAttribute("person") Person person,
                                   @PathVariable("id") int id) {
         bookService.addBookToPerson(person, id);
-        return "redirect:/books/{id}";
+        return "redirect:/library/books/{id}";
     }
 
     @PatchMapping("/{id}/free")
     public String freeBook(@PathVariable("id") int id) {
         bookService.freeBook(id);
-        return "redirect:/books/{id}";
+        return "redirect:/library/books/{id}";
     }
 
     @GetMapping("/search")
@@ -109,6 +110,6 @@ public class BooksController {
     @DeleteMapping("/{id}")
     public String deleteBook(@PathVariable("id") int id) {
         bookService.delete(id);
-        return "redirect:/books";
+        return "redirect:/library/books";
     }
 }
