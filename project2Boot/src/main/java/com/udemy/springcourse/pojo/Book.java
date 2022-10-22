@@ -1,6 +1,6 @@
-package com.udemy.springcourse.project2Boot.pojo;
+package com.udemy.springcourse.pojo;
 
-import com.udemy.springcourse.project2Boot.validators.CurrentYear;
+import com.udemy.springcourse.validators.CurrentYear;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,7 +1,7 @@
-package com.udemy.springcourse.project2Boot.repositories;
+package com.udemy.springcourse.repositories;
 
 
-import com.udemy.springcourse.project2Boot.pojo.Person;
+import com.udemy.springcourse.pojo.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

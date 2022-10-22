@@ -1,8 +1,8 @@
-package com.udemy.springcourse.project2Boot.services;
+package com.udemy.springcourse.services;
 
 
-import com.udemy.springcourse.project2Boot.pojo.Person;
-import com.udemy.springcourse.project2Boot.repositories.PeopleRepository;
+import com.udemy.springcourse.pojo.Person;
+import com.udemy.springcourse.repositories.PeopleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

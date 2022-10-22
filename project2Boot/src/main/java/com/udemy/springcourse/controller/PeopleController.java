@@ -1,10 +1,10 @@
-package com.udemy.springcourse.project2Boot.controller;
+package com.udemy.springcourse.controller;
 
-import com.udemy.springcourse.project2Boot.pojo.Book;
-import com.udemy.springcourse.project2Boot.pojo.Person;
-import com.udemy.springcourse.project2Boot.services.BookService;
-import com.udemy.springcourse.project2Boot.services.PeopleService;
-import com.udemy.springcourse.project2Boot.validators.UniquePersonValidator;
+import com.udemy.springcourse.pojo.Book;
+import com.udemy.springcourse.pojo.Person;
+import com.udemy.springcourse.services.BookService;
+import com.udemy.springcourse.services.PeopleService;
+import com.udemy.springcourse.validators.UniquePersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -1,4 +1,4 @@
-package com.udemy.springcourse.project2Boot.validators;
+package com.udemy.springcourse.validators;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

@@ -1,7 +1,7 @@
-package com.udemy.springcourse.project2Boot.validators;
+package com.udemy.springcourse.validators;
 
-import com.udemy.springcourse.project2Boot.pojo.Person;
-import com.udemy.springcourse.project2Boot.services.PeopleService;
+import com.udemy.springcourse.pojo.Person;
+import com.udemy.springcourse.services.PeopleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

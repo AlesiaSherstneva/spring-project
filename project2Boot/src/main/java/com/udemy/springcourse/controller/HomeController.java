@@ -1,4 +1,4 @@
-package com.udemy.springcourse.project2Boot.controller;
+package com.udemy.springcourse.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
