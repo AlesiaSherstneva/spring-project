@@ -6,7 +6,9 @@
 </head>
 <body>
 
+<!--suppress HtmlUnknownTarget -->
 <form name="f" method="post" action="/process_login">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
     <label for="username">Введите имя пользователя: </label>
     <input type="text" name="username" id="username"/>
     <br/>
