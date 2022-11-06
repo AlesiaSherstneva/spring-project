@@ -28,4 +28,9 @@ public class PeopleService {
         Optional<Person> foundPerson = peopleRepository.findById(id);
         return foundPerson.orElseThrow(PersonNotFoundException::new);
     }
+
+    @Transactional
+    public void save(Person person) {
+        peopleRepository.save(person);
+    }
 }
