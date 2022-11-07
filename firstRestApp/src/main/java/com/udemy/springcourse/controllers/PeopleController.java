@@ -6,6 +6,7 @@ import com.udemy.springcourse.services.PeopleService;
 import com.udemy.springcourse.util.PersonErrorResponse;
 import com.udemy.springcourse.util.PersonNotCreatedException;
 import com.udemy.springcourse.util.PersonNotFoundException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +21,12 @@ import java.util.List;
 @RequestMapping("/people")
 public class PeopleController {
     private final PeopleService peopleService;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public PeopleController(PeopleService peopleService) {
+    public PeopleController(PeopleService peopleService, ModelMapper modelMapper) {
         this.peopleService = peopleService;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping()
@@ -73,11 +76,6 @@ public class PeopleController {
     }
 
     private Person convertToPerson(PersonDTO personDTO) {
-        Person person = new Person();
-        person.setName(personDTO.getName());
-        person.setAge(personDTO.getAge());
-        person.setEmail(personDTO.getEmail());
-        return person;
+        return modelMapper.map(personDTO, Person.class);
     }
-
 }
