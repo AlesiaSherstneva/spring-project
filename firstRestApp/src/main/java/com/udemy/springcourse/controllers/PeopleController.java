@@ -1,5 +1,6 @@
 package com.udemy.springcourse.controllers;
 
+import com.udemy.springcourse.dto.PersonDTO;
 import com.udemy.springcourse.pojos.Person;
 import com.udemy.springcourse.services.PeopleService;
 import com.udemy.springcourse.util.PersonErrorResponse;
@@ -36,7 +37,7 @@ public class PeopleController {
     }
 
     @PostMapping
-    public ResponseEntity<HttpStatus> create(@RequestBody @Valid Person person,
+    public ResponseEntity<HttpStatus> create(@RequestBody @Valid PersonDTO personDTO,
                                              BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             StringBuilder errorMessage = new StringBuilder();
@@ -49,7 +50,7 @@ public class PeopleController {
             }
             throw new PersonNotCreatedException(errorMessage.toString());
         }
-        peopleService.save(person);
+        peopleService.save(convertToPerson(personDTO));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -70,4 +71,13 @@ public class PeopleController {
         );
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
+    private Person convertToPerson(PersonDTO personDTO) {
+        Person person = new Person();
+        person.setName(personDTO.getName());
+        person.setAge(personDTO.getAge());
+        person.setEmail(personDTO.getEmail());
+        return person;
+    }
+
 }
