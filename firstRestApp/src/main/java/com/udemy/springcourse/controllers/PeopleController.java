@@ -27,7 +27,6 @@ public class PeopleController {
 
     @GetMapping()
     public List<Person> getPeople() {
-        System.out.println(peopleService.findAll().get(0));
         return peopleService.findAll();
     }
 
