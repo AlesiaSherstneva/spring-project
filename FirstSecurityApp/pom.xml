@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.udemy.springcourse</groupId>
-	<artifactId>FirstSecurityApp</artifactId>
+	<artifactId>firstSecurityApp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>FirstSecurityApp</name>
+	<name>firstSecurityApp</name>
 	<description>First Spring Boot App with Security</description>
 	<properties>
 		<java.version>11</java.version>
