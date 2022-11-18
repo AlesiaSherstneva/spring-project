@@ -1,5 +1,6 @@
 package com.udemy.springcourse.services;
 
+import com.udemy.springcourse.exceptions.SensorNotFoundException;
 import com.udemy.springcourse.pojos.Sensor;
 import com.udemy.springcourse.repositories.SensorsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,5 +20,9 @@ public class SensorsService {
     @Transactional
     public void save(Sensor sensor) {
         sensorsRepository.save(sensor);
+    }
+
+    public Sensor findOneByName(String name) {
+        return sensorsRepository.findByName(name).orElseThrow(SensorNotFoundException::new);
     }
 }
