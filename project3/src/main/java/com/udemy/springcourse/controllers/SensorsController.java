@@ -2,8 +2,9 @@ package com.udemy.springcourse.controllers;
 
 
 import com.udemy.springcourse.dto.SensorDTO;
-import com.udemy.springcourse.exceptions.SensorErrorResponse;
+import com.udemy.springcourse.exceptions.ErrorResponse;
 import com.udemy.springcourse.exceptions.SensorNotCreatedException;
+import com.udemy.springcourse.exceptions.SensorNotFoundException;
 import com.udemy.springcourse.pojos.Sensor;
 import com.udemy.springcourse.services.SensorsService;
 import com.udemy.springcourse.validators.UniqueSensorValidator;
@@ -19,7 +20,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("sensors")
+@RequestMapping("/sensors")
 public class SensorsController {
     private final SensorsService sensorsService;
     private final UniqueSensorValidator validator;
@@ -32,15 +33,14 @@ public class SensorsController {
         this.modelMapper = modelMapper;
     }
 
-    @PostMapping("registration")
+    @PostMapping("/registration")
     public ResponseEntity<HttpStatus> create(@RequestBody @Valid SensorDTO sensorDTO,
                                              BindingResult bindingResult) {
-        Sensor sensor = convertToSensor(sensorDTO);
-        validator.validate(sensor, bindingResult);
+        validator.validate(sensorDTO, bindingResult);
         if (bindingResult.hasErrors()) {
             StringBuilder errorMessage = new StringBuilder();
             List<FieldError> errors = bindingResult.getFieldErrors();
-            for (FieldError error: errors) {
+            for (FieldError error : errors) {
                 errorMessage.append(error.getField())
                         .append(" - ")
                         .append(error.getDefaultMessage())
@@ -48,13 +48,13 @@ public class SensorsController {
             }
             throw new SensorNotCreatedException(errorMessage.toString());
         }
-        sensorsService.save(sensor);
+        sensorsService.save(convertToSensor(sensorDTO));
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @ExceptionHandler
-    private ResponseEntity<SensorErrorResponse> handleException(SensorNotCreatedException exception) {
-        SensorErrorResponse response = new SensorErrorResponse(
+    private ResponseEntity<ErrorResponse> handleException(SensorNotCreatedException exception) {
+        ErrorResponse response = new ErrorResponse(
                 exception.getMessage(), System.currentTimeMillis()
         );
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
@@ -63,9 +63,4 @@ public class SensorsController {
     private Sensor convertToSensor(SensorDTO sensorDTO) {
         return modelMapper.map(sensorDTO, Sensor.class);
     }
-
-    private SensorDTO convertToSensorDTO(Sensor sensor) {
-        return modelMapper.map(sensor, SensorDTO.class);
-    }
-
 }
