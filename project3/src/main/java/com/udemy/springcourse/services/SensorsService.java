@@ -23,6 +23,10 @@ public class SensorsService {
     }
 
     public Sensor findOneByName(String name) {
+        return sensorsRepository.findByName(name).orElse(null);
+    }
+
+    public Sensor findOneByNameOrElseThrowException(String name) {
         return sensorsRepository.findByName(name).orElseThrow(SensorNotFoundException::new);
     }
 }
