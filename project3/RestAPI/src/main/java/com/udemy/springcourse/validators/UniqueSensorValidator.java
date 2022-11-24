@@ -13,25 +13,21 @@ import org.springframework.validation.Validator;
 @Component
 public class UniqueSensorValidator implements Validator {
     private final SensorsService sensorsService;
-    private final ModelMapper modelMapper;
 
     @Autowired
-    public UniqueSensorValidator(SensorsService sensorsService, ModelMapper modelMapper) {
+    public UniqueSensorValidator(SensorsService sensorsService) {
         this.sensorsService = sensorsService;
-        this.modelMapper = modelMapper;
     }
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return SensorDTO.class.equals(clazz);
+        return Sensor.class.equals(clazz);
     }
 
     @Override
     public void validate(Object object, Errors errors) {
-        SensorDTO sensorDTO = (SensorDTO) object;
-        Sensor sensor = modelMapper.map(sensorDTO, Sensor.class);
-        Sensor sensorInBase = sensorsService.findOneByName(sensor.getName());
-        if (sensorInBase != null) {
+        Sensor sensor = (Sensor) object;
+        if (sensorsService.findOneByName(sensor.getName()).isPresent()) {
             errors.rejectValue("name", "", "Такой сенсор уже зарегистрирован!");
         }
     }

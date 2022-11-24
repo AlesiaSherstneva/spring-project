@@ -42,7 +42,7 @@ public class MeasurementsController {
     }
 
     @GetMapping("/rainyDaysCount")
-    public int showRainyDays() {
+    public Long showRainyDays() {
         return measurementsService.countRainyDays();
     }
 

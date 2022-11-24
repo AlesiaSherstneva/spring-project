@@ -23,15 +23,8 @@ public class MeasurementsService {
         return measurementsRepository.findAll();
     }
 
-    public int countRainyDays() {
-        List<Measurement> measurements = measurementsRepository.findAll();
-        int counter = 0;
-        for(Measurement measurement: measurements) {
-            if (measurement.isRaining()) {
-                counter++;
-            }
-        }
-        return counter;
+    public Long countRainyDays() {
+        return measurementsRepository.findAll().stream().filter(Measurement::isRaining).count();
     }
 
     @Transactional
