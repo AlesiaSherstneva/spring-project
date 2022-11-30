@@ -29,7 +29,7 @@ public class AuthController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping("/login")
+/*    @GetMapping("/login")
     public String loginPage() {
         return "auth/login";
     }
@@ -37,7 +37,7 @@ public class AuthController {
     @GetMapping("/registration")
     public String registrationPage(@ModelAttribute("person") Person person) {
         return "auth/registration";
-    }
+    }*/
 
     @PostMapping("/registration")
     public Map<String, String> performRegistration(@RequestBody @Valid PersonDTO personDTO,
