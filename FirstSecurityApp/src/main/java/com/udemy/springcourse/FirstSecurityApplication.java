@@ -6,10 +6,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class FirstSecurityAppApplication {
+public class FirstSecurityApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(FirstSecurityAppApplication.class, args);
+		SpringApplication.run(FirstSecurityApplication.class, args);
 	}
 
 	@Bean
