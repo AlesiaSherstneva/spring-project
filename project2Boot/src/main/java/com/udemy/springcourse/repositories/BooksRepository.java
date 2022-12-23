@@ -12,5 +12,5 @@ import java.util.List;
 public interface BooksRepository extends JpaRepository<Book, Integer> {
     List<Book> findByReader(Person reader);
 
-    List<Book> findByTitleStartingWithIgnoreCase (String startString);
+    List<Book> findByTitleStartingWithIgnoreCase(String startString);
 }

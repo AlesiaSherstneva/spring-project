@@ -69,7 +69,7 @@ class BookServiceWithMockRepositoryTest {
     void findAndPageAndSortByYear() {
         PageImpl<Book> pagedBooks = new PageImpl<>(testBooks);
         when(booksRepository.findAll(isA(Pageable.class))).thenReturn(pagedBooks);
-        for(int i = 1; i <= 10; i++) {
+        for (int i = 1; i <= 10; i++) {
             assertEquals(testBooks, bookService.findAndPage(i, i));
         }
         verify(booksRepository, times(10)).findAll(isA(Pageable.class));
