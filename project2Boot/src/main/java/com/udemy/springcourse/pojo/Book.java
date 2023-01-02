@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
 
@@ -27,16 +28,21 @@ public class Book {
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person reader;
 
+    @NotNull(message = "Название не может быть пустым")
     @Pattern(regexp = "[0-9А-ЯЁ][0-9a-zA-Zа-яА-ЯёЁ\\-\\s]+",
             message = "Должен быть формат \"Название\" на русском языке")
+    @Column(name = "title")
     private String title;
 
+    @NotNull(message = "Имя автора не может быть пустым")
     @Pattern(regexp = "[А-ЯЁ][а-яА-ЯёЁ\\-]+\\s[А-ЯЁ][а-яА-ЯёЁ\\-]+",
             message = "Должен быть формат \"Фамилия Имя\" на русском языке")
+    @Column(name = "author")
     private String author;
 
     @Min(value = 1445, message = "Год издания должен быть больше 1445")
     @CurrentYear
+    @Column(name = "year")
     private int year;
 
     @Temporal(TemporalType.TIMESTAMP)

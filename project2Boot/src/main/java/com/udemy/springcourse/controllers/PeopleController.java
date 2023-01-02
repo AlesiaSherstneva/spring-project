@@ -1,9 +1,9 @@
-package com.udemy.springcourse.controller;
+package com.udemy.springcourse.controllers;
 
-import com.udemy.springcourse.dao.BookDAO;
-import com.udemy.springcourse.dao.PersonDAO;
 import com.udemy.springcourse.pojo.Book;
 import com.udemy.springcourse.pojo.Person;
+import com.udemy.springcourse.services.BookService;
+import com.udemy.springcourse.services.PeopleService;
 import com.udemy.springcourse.validators.UniquePersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,29 +15,30 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
-@RequestMapping("/people")
+@RequestMapping("/library/people")
 public class PeopleController {
-    private final PersonDAO personDAO;
-    private final BookDAO bookDAO;
+    private final PeopleService peopleService;
+    private final BookService bookService;
     private final UniquePersonValidator validator;
 
     @Autowired
-    public PeopleController(PersonDAO personDAO, BookDAO bookDAO, UniquePersonValidator validator) {
-        this.personDAO = personDAO;
-        this.bookDAO = bookDAO;
+    public PeopleController(PeopleService peopleService, BookService bookService, UniquePersonValidator validator) {
+        this.peopleService = peopleService;
+        this.bookService = bookService;
         this.validator = validator;
     }
 
     @GetMapping
     public String showPeople(Model model) {
-        model.addAttribute("people", personDAO.showPeople());
+        model.addAttribute("people", peopleService.findAll());
         return "people/show";
     }
 
     @GetMapping("/{id}")
     public String showPerson(@PathVariable("id") int id, Model model) {
-        model.addAttribute("person", personDAO.showPerson(id));
-        List<Book> books = bookDAO.showBooksByPerson(id);
+        Person person = peopleService.findOneById(id);
+        List<Book> books = bookService.findByReader(person);
+        model.addAttribute("person", person);
         if (!books.isEmpty()) {
             model.addAttribute("books", books);
         }
@@ -54,13 +55,13 @@ public class PeopleController {
                                BindingResult bindingResult) {
         validator.validate(person, bindingResult);
         if (bindingResult.hasErrors()) return "people/new";
-        personDAO.save(person);
-        return "redirect:/people";
+        peopleService.save(person);
+        return "redirect:/library/people";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable("id") int id, Model model) {
-        model.addAttribute("person", personDAO.showPerson(id));
+        model.addAttribute("person", peopleService.findOneById(id));
         return "people/edit";
     }
 
@@ -70,13 +71,13 @@ public class PeopleController {
                          @PathVariable("id") int id) {
         validator.validate(person, bindingResult);
         if (bindingResult.hasErrors()) return "people/edit";
-        personDAO.update(id, person);
-        return "redirect:/people";
+        peopleService.update(id, person);
+        return "redirect:/library/people";
     }
 
     @DeleteMapping("/{id}")
     public String deletePerson(@PathVariable("id") int id) {
-        personDAO.delete(id);
-        return "redirect:/people";
+        peopleService.delete(id);
+        return "redirect:/library/people";
     }
 }

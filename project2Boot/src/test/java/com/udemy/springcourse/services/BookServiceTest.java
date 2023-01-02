@@ -7,9 +7,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -24,11 +24,11 @@ import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.Random.class)
-class BookServiceWithMockRepositoryTest {
-    @Mock
+class BookServiceTest {
+    @MockBean
     BooksRepository booksRepository;
 
-    @InjectMocks
+    @Autowired
     BookService bookService;
 
     Book testBook;
@@ -44,21 +44,21 @@ class BookServiceWithMockRepositoryTest {
     }
 
     @Test
-    void findAll() {
+    void findAllTest() {
         when(booksRepository.findAll()).thenReturn(testBooks);
         assertSame(testBooks, bookService.findAll());
         verify(booksRepository, times(1)).findAll();
     }
 
     @Test
-    void findAndSortByYear() {
+    void findAndSortByYearTest() {
         when(booksRepository.findAll(Sort.by("year"))).thenReturn(testBooks);
         assertEquals(testBook, bookService.findAndSortByYear().get(0));
         verify(booksRepository, times(1)).findAll(Sort.by("year"));
     }
 
     @Test
-    void findAndPage() {
+    void findAndPageTest() {
         PageImpl<Book> pagedBooks = new PageImpl<>(testBooks);
         when(booksRepository.findAll(isA(Pageable.class))).thenReturn(pagedBooks);
         assertEquals(testBooks, bookService.findAndPage(1, 1));
@@ -66,7 +66,7 @@ class BookServiceWithMockRepositoryTest {
     }
 
     @Test
-    void findAndPageAndSortByYear() {
+    void findAndPageAndSortByYearTest() {
         PageImpl<Book> pagedBooks = new PageImpl<>(testBooks);
         when(booksRepository.findAll(isA(Pageable.class))).thenReturn(pagedBooks);
         for (int i = 1; i <= 10; i++) {
@@ -76,21 +76,21 @@ class BookServiceWithMockRepositoryTest {
     }
 
     @Test
-    void findOneById() {
+    void findOneByIdTest() {
         when(booksRepository.findById(anyInt())).thenReturn(Optional.of(testBook));
         assertEquals(testBook, bookService.findOneById(anyInt()));
         verify(booksRepository, times(1)).findById(anyInt());
     }
 
     @Test
-    void findByReader() {
+    void findByReaderTest() {
         when(booksRepository.findByReader(testPerson)).thenReturn(testBooks);
         assertEquals(testBook, bookService.findByReader(testPerson).get(0));
         verify(booksRepository, times(1)).findByReader(testPerson);
     }
 
     @Test
-    void save() {
+    void saveTest() {
         bookService.save(testBook);
         bookService.save(testBook);
         bookService.save(testBook);
@@ -98,7 +98,7 @@ class BookServiceWithMockRepositoryTest {
     }
 
     @Test
-    void update() {
+    void updateTest() {
         testBook.setReader(testPerson);
         testBook.setTakenAt(new Date());
         when(booksRepository.findById(anyInt())).thenReturn(Optional.of(testBook));
@@ -109,7 +109,7 @@ class BookServiceWithMockRepositoryTest {
     }
 
     @Test
-    void addBookToPerson() {
+    void addBookToPersonTest() {
         when(booksRepository.findById(anyInt())).thenReturn(Optional.of(testBook));
         bookService.addBookToPerson(testPerson, anyInt());
         assertEquals(testPerson, testBook.getReader());
@@ -118,7 +118,7 @@ class BookServiceWithMockRepositoryTest {
     }
 
     @Test
-    void freeBook() {
+    void freeBookTest() {
         testBook.setReader(testPerson);
         testBook.setTakenAt(new Date());
         when(booksRepository.findById(anyInt())).thenReturn(Optional.of(testBook));
@@ -129,7 +129,7 @@ class BookServiceWithMockRepositoryTest {
     }
 
     @Test
-    void searchBooks() {
+    void searchBooksTest() {
         when(booksRepository.findByTitleStartingWithIgnoreCase(anyString())).thenReturn(testBooks);
         assertEquals(testBooks, bookService.searchBooks(anyString()));
         verify(booksRepository, times(1))
@@ -137,7 +137,7 @@ class BookServiceWithMockRepositoryTest {
     }
 
     @Test
-    void delete() {
+    void deleteTest() {
         bookService.delete(anyInt());
         verify(booksRepository, times(1)).deleteById(anyInt());
     }

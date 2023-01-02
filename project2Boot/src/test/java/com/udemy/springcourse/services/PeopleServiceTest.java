@@ -6,9 +6,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +20,10 @@ import static org.mockito.Mockito.*;
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.Random.class)
 class PeopleServiceTest {
-    @Mock
+    @MockBean
     PeopleRepository peopleRepository;
 
-    @InjectMocks
+    @Autowired
     PeopleService peopleService;
 
     Person testPerson;
@@ -39,42 +39,42 @@ class PeopleServiceTest {
     }
 
     @Test
-    void findAll() {
+    void findAllTest() {
         when(peopleRepository.findAll()).thenReturn(testPeople);
         assertSame(testPeople, peopleService.findAll());
         verify(peopleRepository).findAll();
     }
 
     @Test
-    void findOneById() {
-        when(peopleRepository.findById(anyInt())).thenReturn(Optional.of(testPeople.get(0)));
+    void findOneByIdTest() {
+        when(peopleRepository.findById(anyInt())).thenReturn(Optional.of(testPerson));
         assertNotNull(peopleService.findOneById(anyInt()));
         assertEquals("Test", peopleService.findOneById(anyInt()).getName());
         verify(peopleRepository, times(2)).findById(anyInt());
     }
 
     @Test
-    void findOneByName() {
-        when(peopleRepository.findByName(anyString())).thenReturn(Optional.of(testPeople.get(0)));
-        assertNotNull(peopleService.findOneByName("Some string"));
-        assertEquals("Test", peopleService.findOneByName("Another string").getName());
+    void findOneByNameTest() {
+        when(peopleRepository.findByName(anyString())).thenReturn(Optional.of(testPerson));
+        assertNotNull(peopleService.findOneByName(anyString()));
+        assertEquals("Test", peopleService.findOneByName(anyString()).getName());
         verify(peopleRepository, times(2)).findByName(anyString());
     }
 
     @Test
-    void save() {
+    void saveTest() {
         peopleService.save(testPerson);
         verify(peopleRepository, times(1)).save(testPerson);
     }
 
     @Test
-    void update() {
+    void updateTest() {
         peopleService.update(anyInt(), testPerson);
         verify(peopleRepository, times(1)).save(testPerson);
     }
 
     @Test
-    void delete() {
+    void deleteTest() {
         peopleService.delete(anyInt());
         verify(peopleRepository, times(1)).deleteById(anyInt());
     }
