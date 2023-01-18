@@ -15,6 +15,7 @@ import javax.validation.constraints.*;
 public class Person {
     private int id;
 
+    @NotNull(message = "ФИО не может быть пустым")
     @Pattern(regexp = "([А-ЯЁ][а-яА-ЯёЁ\\-]+\\s){2}[А-ЯЁ][а-яё]+",
             message = "Должен быть формат \"Фамилия Имя Отчество\" на русском языке")
     private String name;
