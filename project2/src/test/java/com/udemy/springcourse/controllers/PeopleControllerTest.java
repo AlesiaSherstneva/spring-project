@@ -1,10 +1,10 @@
 package com.udemy.springcourse.controllers;
 
 import com.udemy.springcourse.config.SpringConfig;
-import com.udemy.springcourse.dao.BookDAO;
-import com.udemy.springcourse.dao.PersonDAO;
 import com.udemy.springcourse.pojo.Book;
 import com.udemy.springcourse.pojo.Person;
+import com.udemy.springcourse.services.BookService;
+import com.udemy.springcourse.services.PeopleService;
 import com.udemy.springcourse.validators.UniquePersonValidator;
 import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
@@ -31,10 +31,10 @@ class PeopleControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private PersonDAO personDAO;
+    private PeopleService peopleService;
 
     @Mock
-    private BookDAO bookDAO;
+    private BookService bookService;
 
     @InjectMocks
     private PeopleController peopleController;
@@ -54,7 +54,7 @@ class PeopleControllerTest {
 
     @Test
     void showPeopleTest() throws Exception {
-        when(personDAO.showPeople()).thenReturn(testPeople);
+        when(peopleService.findAll()).thenReturn(testPeople);
         mockMvc.perform(get("/people"))
                 .andExpectAll(
                         model().size(1),
@@ -62,13 +62,13 @@ class PeopleControllerTest {
                         status().isOk(),
                         forwardedUrl("people/show")
                 );
-        verify(personDAO, times(1)).showPeople();
+        verify(peopleService, times(1)).findAll();
     }
 
     @Test
     void showPersonTest() throws Exception {
-        when(personDAO.showPerson(anyInt())).thenReturn(testPerson);
-        when(bookDAO.showBooksByPerson(anyInt())).thenReturn(testBooks);
+        when(peopleService.findOneById(anyInt())).thenReturn(testPerson);
+        when(bookService.findByReader(any(Person.class))).thenReturn(testBooks);
 
         //test with empty list of books
         mockMvc.perform(get("/people/{id}", anyInt()))
@@ -91,8 +91,8 @@ class PeopleControllerTest {
                         forwardedUrl("people/profile")
                 );
 
-        verify(personDAO, times(2)).showPerson(anyInt());
-        verify(bookDAO, times(2)).showBooksByPerson(anyInt());
+        verify(peopleService, times(2)).findOneById(anyInt());
+        verify(bookService, times(2)).findByReader(any(Person.class));
     }
 
     @Test
@@ -109,7 +109,7 @@ class PeopleControllerTest {
     @Test
     void createPersonTest() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(new PeopleController(
-                personDAO, bookDAO, mock(UniquePersonValidator.class))).build();
+                peopleService, bookService, mock(UniquePersonValidator.class))).build();
 
         // test empty new person
         mockMvc.perform(post("/people")
@@ -137,7 +137,7 @@ class PeopleControllerTest {
 
         // test a person with year earlier than 1900
         testPerson.setName("Фамилия Имя Отчество");
-        testPerson.setYear(1111);
+        testPerson.setYear(1000);
         mockMvc.perform(post("/people")
                         .flashAttr("person", testPerson))
                 .andExpectAll(
@@ -149,8 +149,7 @@ class PeopleControllerTest {
                 );
 
         // test a person with year later than current
-        testPerson.setName("Фамилия Имя Отчество");
-        testPerson.setYear(9999);
+        testPerson.setYear(9000);
         mockMvc.perform(post("/people")
                         .flashAttr("person", testPerson))
                 .andExpectAll(
@@ -172,12 +171,12 @@ class PeopleControllerTest {
                         status().is3xxRedirection(),
                         redirectedUrl("/people")
                 );
-        verify(personDAO, times(1)).save(any(Person.class));
+        verify(peopleService, times(1)).save(any(Person.class));
     }
 
     @Test
     void editTest() throws Exception {
-        when(personDAO.showPerson(anyInt())).thenReturn(testPerson);
+        when(peopleService.findOneById(anyInt())).thenReturn(testPerson);
         mockMvc.perform(get("/people/{id}/edit", anyInt()))
                 .andExpectAll(
                         model().size(1),
@@ -185,14 +184,14 @@ class PeopleControllerTest {
                         status().isOk(),
                         forwardedUrl("people/edit")
                 );
-        verify(personDAO, times(1)).showPerson(anyInt());
+        verify(peopleService, times(1)).findOneById(anyInt());
     }
 
     @Test
     void updateTest() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(new PeopleController(
-                personDAO, bookDAO, mock(UniquePersonValidator.class))).build();
-        testPerson.setId(new Random().nextInt());
+                peopleService, bookService, mock(UniquePersonValidator.class))).build();
+        testPerson.setId(new Random().nextInt(100));
 
         // test empty new person
         mockMvc.perform(patch("/people/{id}", testPerson.getId())
@@ -230,23 +229,21 @@ class PeopleControllerTest {
                         status().is3xxRedirection(),
                         redirectedUrl("/people")
                 );
-        verify(personDAO, times(1)).update(anyInt(), any(Person.class));
+        verify(peopleService, times(1)).update(anyInt(), any(Person.class));
     }
 
     @Test
     void deletePersonTest() throws Exception {
-        for(int i = 0; i < 7; i++) {
-            mockMvc.perform(delete("/people/{id}", anyInt()))
-                    .andExpectAll(
-                            status().is3xxRedirection(),
-                            redirectedUrl("/people")
-                    );
-        }
-        verify(personDAO, times(7)).delete(anyInt());
+        mockMvc.perform(delete("/people/{id}", anyInt()))
+                .andExpectAll(
+                        status().is3xxRedirection(),
+                        redirectedUrl("/people")
+                );
+        verify(peopleService, times(1)).delete(anyInt());
     }
 
     @AfterEach
     void tearDown() {
-        verifyNoMoreInteractions(personDAO);
+        verifyNoMoreInteractions(peopleService);
     }
 }

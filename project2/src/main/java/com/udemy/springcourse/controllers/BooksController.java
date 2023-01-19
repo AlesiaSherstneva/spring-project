@@ -1,4 +1,4 @@
-package com.udemy.springcourse.controller;
+package com.udemy.springcourse.controllers;
 
 import com.udemy.springcourse.pojo.Book;
 import com.udemy.springcourse.pojo.Person;

@@ -1,10 +1,10 @@
 package com.udemy.springcourse.controllers;
 
 import com.udemy.springcourse.config.SpringConfig;
-import com.udemy.springcourse.dao.BookDAO;
-import com.udemy.springcourse.dao.PersonDAO;
 import com.udemy.springcourse.pojo.Book;
 import com.udemy.springcourse.pojo.Person;
+import com.udemy.springcourse.services.BookService;
+import com.udemy.springcourse.services.PeopleService;
 import org.junit.jupiter.api.*;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -28,10 +28,10 @@ class BooksControllerTest {
     private MockMvc mockMvc;
 
     @Mock
-    private BookDAO bookDAO;
+    private BookService bookService;
 
     @Mock
-    private PersonDAO personDAO;
+    private PeopleService peopleService;
 
     @InjectMocks
     private BooksController booksController;
@@ -48,13 +48,13 @@ class BooksControllerTest {
         testBooks = new ArrayList<>();
         testPeople = new ArrayList<>();
 
-        mockMvc = MockMvcBuilders.standaloneSetup(booksController)
-                .build();
+        mockMvc = MockMvcBuilders.standaloneSetup(booksController).build();
     }
 
     @Test
     void showBooksTest() throws Exception {
-        when(bookDAO.showBooks()).thenReturn(testBooks);
+        // test without sorting and paging
+        when(bookService.findAll()).thenReturn(testBooks);
         mockMvc.perform(get("/books"))
                 .andExpectAll(
                         model().size(1),
@@ -62,14 +62,53 @@ class BooksControllerTest {
                         status().isOk(),
                         forwardedUrl("books/show")
                 );
-        verify(bookDAO, times(1)).showBooks();
+        verify(bookService, times(1)).findAll();
+
+        // test with paging only
+        when(bookService.findAndPage(anyInt(), anyInt())).thenReturn(testBooks);
+        mockMvc.perform(get("/books")
+                        .param("page", "1")
+                        .param("books_per_page", "2"))
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("books", testBooks),
+                        status().isOk(),
+                        forwardedUrl("books/show")
+                );
+        verify(bookService, times(1)).findAndPage(anyInt(), anyInt());
+
+        // test with sorting only
+        when(bookService.findAndSortByYear()).thenReturn(testBooks);
+        mockMvc.perform(get("/books")
+                        .param("sort_by_year", "true"))
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("books", testBooks),
+                        status().isOk(),
+                        forwardedUrl("books/show")
+                );
+        verify(bookService, times(1)).findAndSortByYear();
+
+        // test with sorting and paging
+        when(bookService.findAndPageAndSortByYear(anyInt(), anyInt())).thenReturn(testBooks);
+        mockMvc.perform(get("/books")
+                        .param("page", "1")
+                        .param("books_per_page", "2")
+                        .param("sort_by_year", "true"))
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("books", testBooks),
+                        status().isOk(),
+                        forwardedUrl("books/show")
+                );
+        verify(bookService, times(1)).findAndPageAndSortByYear(anyInt(), anyInt());
     }
 
     @Test
     void showBookTest() throws Exception {
-        when(bookDAO.showBook(anyInt())).thenReturn(testBook);
-        when(personDAO.showPeople()).thenReturn(testPeople);
-        when(personDAO.showPerson(anyInt())).thenReturn(testPerson);
+        when(bookService.findOneById(anyInt())).thenReturn(testBook);
+        when(peopleService.findAll()).thenReturn(testPeople);
+        when(peopleService.findOneById(anyInt())).thenReturn(testPerson);
 
         // test a book without a reader
         mockMvc.perform(get("/books/{id}", anyInt()))
@@ -83,7 +122,7 @@ class BooksControllerTest {
                 );
 
         // test a book with a reader
-        testBook.setPerson_id(new Random().nextInt());
+        testBook.setReader(testPerson);
         mockMvc.perform(get("/books/{id}", anyInt()))
                 .andExpectAll(
                         model().size(3),
@@ -93,9 +132,8 @@ class BooksControllerTest {
                         status().isOk(),
                         forwardedUrl("books/profile")
                 );
-        verify(bookDAO, times(2)).showBook(anyInt());
-        verify(personDAO, times(1)).showPerson(anyInt());
-        verify(personDAO, times(1)).showPeople();
+        verify(bookService, times(2)).findOneById(anyInt());
+        verify(peopleService, times(1)).findAll();
     }
 
     @Test
@@ -173,12 +211,12 @@ class BooksControllerTest {
                         status().is3xxRedirection(),
                         redirectedUrl("/books")
                 );
-        verify(bookDAO, times(1)).save(any(Book.class));
+        verify(bookService, times(1)).save(any(Book.class));
     }
 
     @Test
     void editBookTest() throws Exception {
-        when(bookDAO.showBook(anyInt())).thenReturn(testBook);
+        when(bookService.findOneById(anyInt())).thenReturn(testBook);
         mockMvc.perform(get("/books/{id}/edit", anyInt()))
                 .andExpectAll(
                         model().size(1),
@@ -186,12 +224,12 @@ class BooksControllerTest {
                         status().isOk(),
                         forwardedUrl("books/edit")
                 );
-        verify(bookDAO, times(1)).showBook(anyInt());
+        verify(bookService, times(1)).findOneById(anyInt());
     }
 
     @Test
     void updateBookTest() throws Exception {
-        testBook.setId(new Random().nextInt());
+        testBook.setId(new Random().nextInt(100));
 
         // test with empty book
         mockMvc.perform(patch("/books/{id}", testBook.getId())
@@ -203,7 +241,6 @@ class BooksControllerTest {
                         status().isOk(),
                         forwardedUrl("books/edit")
                 );
-
 
         // test a book with not valid fields
         testBook.setTitle("Any Title");
@@ -232,12 +269,11 @@ class BooksControllerTest {
                         status().is3xxRedirection(),
                         redirectedUrl("/books")
                 );
-        verify(bookDAO, times(1)).update(anyInt(), any(Book.class));
+        verify(bookService, times(1)).update(anyInt(), any(Book.class));
     }
 
     @Test
     void addBookToPersonTest() throws Exception {
-        when(bookDAO.showBook(anyInt())).thenReturn(testBook);
         mockMvc.perform(patch("/books/{id}/person", testBook.getId())
                         .flashAttr("person", testPerson))
                 .andExpectAll(
@@ -246,8 +282,7 @@ class BooksControllerTest {
                         status().is3xxRedirection(),
                         redirectedUrl("/books/" + testBook.getId())
                 );
-        verify(bookDAO, times(1)).showBook(anyInt());
-        verify(bookDAO, times(1)).update(anyInt(), any(Book.class));
+        verify(bookService, times(1)).addBookToPerson(any(Person.class), anyInt());
     }
 
     @Test
@@ -257,24 +292,49 @@ class BooksControllerTest {
                         status().is3xxRedirection(),
                         redirectedUrl("/books/" + testBook.getId())
                 );
-        verify(bookDAO, times(1)).free(anyInt());
+        verify(bookService, times(1)).freeBook(anyInt());
+    }
+
+
+    @Test
+    void searchBookTest() throws Exception {
+        // test with an empty search string
+        mockMvc.perform(get("/books/search")
+                        .param("startString", ""))
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("startString", ""),
+                        model().attributeDoesNotExist("books"),
+                        status().isOk(),
+                        forwardedUrl("books/search")
+                );
+
+        // test with not empty search string
+        mockMvc.perform(get("/books/search")
+                        .param("startString", "some string"))
+                .andExpectAll(
+                        model().size(2),
+                        model().attribute("startString", "some string"),
+                        model().attributeExists("books"),
+                        status().isOk(),
+                        forwardedUrl("books/search")
+                );
+        verify(bookService, times(1)).searchBooks(anyString());
     }
 
     @Test
     void deleteBookTest() throws Exception {
-        for (int i = 0; i < 6; i++) {
-            mockMvc.perform(delete("/books/{id}", anyInt()))
-                    .andExpectAll(
-                            status().is3xxRedirection(),
-                            redirectedUrl("/books")
-                    );
-        }
-        verify(bookDAO, times(6)).delete(anyInt());
+        mockMvc.perform(delete("/books/{id}", anyInt()))
+                .andExpectAll(
+                        status().is3xxRedirection(),
+                        redirectedUrl("/books")
+                );
+        verify(bookService, times(1)).delete(anyInt());
     }
 
     @AfterEach
     void tearDown() {
-        verifyNoMoreInteractions(bookDAO);
-        verifyNoMoreInteractions(personDAO);
+        verifyNoMoreInteractions(bookService);
+        verifyNoMoreInteractions(peopleService);
     }
 }

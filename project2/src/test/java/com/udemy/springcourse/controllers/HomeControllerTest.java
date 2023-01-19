@@ -2,9 +2,7 @@ package com.udemy.springcourse.controllers;
 
 import com.udemy.springcourse.config.SpringConfig;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,8 +18,7 @@ class HomeControllerTest {
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(new HomeController())
-                .build();
+        mockMvc = MockMvcBuilders.standaloneSetup(new HomeController()).build();
     }
 
     @Test
