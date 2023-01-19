@@ -108,11 +108,65 @@ class BooksControllerTest {
 
     @Test
     void createBook() throws Exception {
+        // test with empty book
         mockMvc.perform(post("/books")
                         .flashAttr("book", testBook))
                 .andExpectAll(
                         model().size(1),
                         model().attribute("book", testBook),
+                        model().attributeErrorCount("book", 3),
+                        status().isOk(),
+                        forwardedUrl("books/new")
+                );
+
+        // test a book with not valid title and author
+        testBook.setTitle("Any Title");
+        testBook.setAuthor("Any Author");
+        testBook.setYear(2000);
+        mockMvc.perform(post("/books")
+                        .flashAttr("book", testBook))
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("book", testBook),
+                        model().attributeErrorCount("book", 2),
+                        status().isOk(),
+                        forwardedUrl("books/new")
+                );
+
+        // test a book with year earlier than 1445
+        testBook.setTitle("Название");
+        testBook.setAuthor("Фамилия Имя");
+        testBook.setYear(945);
+        mockMvc.perform(post("/books")
+                        .flashAttr("book", testBook))
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("book", testBook),
+                        model().attributeErrorCount("book", 1),
+                        status().isOk(),
+                        forwardedUrl("books/new")
+                );
+
+        // test a book with year later than current
+        testBook.setYear(4321);
+        mockMvc.perform(post("/books")
+                        .flashAttr("book", testBook))
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("book", testBook),
+                        model().attributeErrorCount("book", 1),
+                        status().isOk(),
+                        forwardedUrl("books/new")
+                );
+
+        // test a book with valid fields
+        testBook.setYear(2000);
+        mockMvc.perform(post("/books")
+                        .flashAttr("book", testBook))
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("book", testBook),
+                        model().attributeErrorCount("book", 0),
                         status().is3xxRedirection(),
                         redirectedUrl("/books")
                 );
@@ -134,11 +188,44 @@ class BooksControllerTest {
 
     @Test
     void updateBookTest() throws Exception {
+        testBook.setId(new Random().nextInt());
+
+        // test with empty book
         mockMvc.perform(patch("/books/{id}", testBook.getId())
                         .flashAttr("book", testBook))
                 .andExpectAll(
                         model().size(1),
                         model().attribute("book", testBook),
+                        model().attributeErrorCount("book", 3),
+                        status().isOk(),
+                        forwardedUrl("books/edit")
+                );
+
+
+        // test a book with not valid fields
+        testBook.setTitle("Any Title");
+        testBook.setAuthor("Any Author");
+        testBook.setYear(2900);
+        mockMvc.perform(patch("/books/{id}", testBook.getId())
+                        .flashAttr("book", testBook))
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("book", testBook),
+                        model().attributeErrorCount("book", 3),
+                        status().isOk(),
+                        forwardedUrl("books/edit")
+                );
+
+        // test a book with valid fields
+        testBook.setTitle("Название");
+        testBook.setAuthor("Фамилия Имя");
+        testBook.setYear(1500);
+        mockMvc.perform(patch("/books/{id}", testBook.getId())
+                        .flashAttr("book", testBook))
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("book", testBook),
+                        model().attributeErrorCount("book", 0),
                         status().is3xxRedirection(),
                         redirectedUrl("/books")
                 );

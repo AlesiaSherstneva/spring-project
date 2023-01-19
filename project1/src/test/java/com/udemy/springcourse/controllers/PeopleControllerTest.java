@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -109,11 +110,52 @@ class PeopleControllerTest {
     void createPersonTest() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(new PeopleController(
                 personDAO, bookDAO, mock(UniquePersonValidator.class))).build();
+
+        // test empty new person
         mockMvc.perform(post("/people")
                         .flashAttr("person", testPerson))
                 .andExpectAll(
                         model().size(1),
                         model().attribute("person", testPerson),
+                        model().attributeErrorCount("person", 2),
+                        status().isOk(),
+                        forwardedUrl("people/new")
+                );
+
+        // test a person with not valid fields
+        testPerson.setName("Name Surname Patronymic");
+        testPerson.setYear(1800);
+        mockMvc.perform(post("/people")
+                        .flashAttr("person", testPerson))
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("person", testPerson),
+                        model().attributeErrorCount("person", 2),
+                        status().isOk(),
+                        forwardedUrl("people/new")
+                );
+
+        // test a person with year later than current
+        testPerson.setName("Фамилия Имя Отчество");
+        testPerson.setYear(9999);
+        mockMvc.perform(post("/people")
+                        .flashAttr("person", testPerson))
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("person", testPerson),
+                        model().attributeErrorCount("person", 1),
+                        status().isOk(),
+                        forwardedUrl("people/new")
+                );
+
+        // test a person with valid fields
+        testPerson.setYear(1956);
+        mockMvc.perform(post("/people")
+                        .flashAttr("person", testPerson))
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("person", testPerson),
+                        model().attributeErrorCount("person", 0),
                         status().is3xxRedirection(),
                         redirectedUrl("/people")
                 );
@@ -137,11 +179,41 @@ class PeopleControllerTest {
     void updateTest() throws Exception {
         mockMvc = MockMvcBuilders.standaloneSetup(new PeopleController(
                 personDAO, bookDAO, mock(UniquePersonValidator.class))).build();
+        testPerson.setId(new Random().nextInt());
+
+        // test empty new person
         mockMvc.perform(patch("/people/{id}", testPerson.getId())
                         .flashAttr("person", testPerson))
                 .andExpectAll(
                         model().size(1),
                         model().attribute("person", testPerson),
+                        model().attributeErrorCount("person", 2),
+                        status().isOk(),
+                        forwardedUrl("people/edit")
+                );
+
+        // test a person with not valid fields
+        testPerson.setName("Name Surname Patronymic");
+        testPerson.setYear(2345);
+        mockMvc.perform(patch("/people/{id}", testPerson.getId())
+                        .flashAttr("person", testPerson))
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("person", testPerson),
+                        model().attributeErrorCount("person", 2),
+                        status().isOk(),
+                        forwardedUrl("people/edit")
+                );
+
+        // test a person with valid fields
+        testPerson.setName("Фамилия Имя Отчество");
+        testPerson.setYear(2010);
+        mockMvc.perform(patch("/people/{id}", testPerson.getId())
+                        .flashAttr("person", testPerson))
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("person", testPerson),
+                        model().attributeErrorCount("person", 0),
                         status().is3xxRedirection(),
                         redirectedUrl("/people")
                 );
