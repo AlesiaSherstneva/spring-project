@@ -6,7 +6,9 @@ import com.udemy.springcourse.dao.PersonDAO;
 import com.udemy.springcourse.pojo.Book;
 import com.udemy.springcourse.pojo.Person;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -24,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(BooksController.class)
 @ContextConfiguration(classes = SpringConfig.class)
+@TestMethodOrder(MethodOrderer.Random.class)
 class BooksControllerTest {
     private MockMvc mockMvc;
 

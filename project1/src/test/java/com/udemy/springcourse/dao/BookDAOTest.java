@@ -2,9 +2,7 @@ package com.udemy.springcourse.dao;
 
 import com.udemy.springcourse.config.TestConfig;
 import com.udemy.springcourse.pojo.Book;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -14,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJdbcTest
 @ContextConfiguration(classes = TestConfig.class)
+@TestMethodOrder(MethodOrderer.Random.class)
 class BookDAOTest {
     private final BookDAO bookDAO;
     private final JdbcTemplate jdbcTemplate;

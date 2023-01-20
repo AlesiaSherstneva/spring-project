@@ -3,7 +3,9 @@ package com.udemy.springcourse.validators;
 import com.udemy.springcourse.pojo.Book;
 import com.udemy.springcourse.pojo.Person;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -15,7 +17,8 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
-public class ValidationTest {
+@TestMethodOrder(MethodOrderer.Random.class)
+public class JavaxValidationTest {
     private Validator validator;
 
     @BeforeEach

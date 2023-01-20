@@ -2,7 +2,9 @@ package com.udemy.springcourse.controllers;
 
 import com.udemy.springcourse.config.SpringConfig;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -13,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(HomeController.class)
 @ContextConfiguration(classes = SpringConfig.class)
+@TestMethodOrder(MethodOrderer.Random.class)
 class HomeControllerTest {
     private MockMvc mockMvc;
 
