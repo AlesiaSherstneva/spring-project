@@ -5,6 +5,7 @@ import com.udemy.springcourse.pojo.Person;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 
@@ -62,12 +63,24 @@ class PersonDAOTest {
 
     @Test
     void saveTest() {
+        // test saving person with unique name
         personDAO.save(testPerson);
         assertEquals(4, personDAO.showPeople().size());
 
         Person gottenPerson = personDAO.showPerson("Test Person");
         assertEquals(testPerson.getName(), gottenPerson.getName());
         assertEquals(testPerson.getYear(), gottenPerson.getYear());
+
+        // test saving with not unique name
+        testPerson = new Person(0, "Test Person1", 1920);
+        try {
+            personDAO.save(testPerson);
+            fail("There should be violation here");
+        } catch (DuplicateKeyException exception) {
+            String message = exception.getMessage();
+            assertNotNull(message);
+            assertTrue(message.contains("Unique index or primary key violation"));
+        }
     }
 
     @Test
