@@ -45,6 +45,12 @@ class UniquePersonValidatorTest {
     }
 
     @Test
+    public void supportsTest() {
+        assertTrue(validator.supports(Person.class));
+        assertFalse(validator.supports(Object.class));
+    }
+
+    @Test
     public void personWithNotUniqueNameTest() {
         testPerson.setName("Test Person");
         errors = new BeanPropertyBindingResult(testPerson, "person");
