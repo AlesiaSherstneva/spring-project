@@ -2,7 +2,6 @@ package com.udemy.springcourse.validators;
 
 import com.udemy.springcourse.pojo.Book;
 import com.udemy.springcourse.pojo.Person;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -12,17 +11,18 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
+
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @TestMethodOrder(MethodOrderer.Random.class)
-public class JavaxValidationTest {
-    private Validator validator;
+class JavaxValidationTest {
+    private final Validator validator;
 
-    @BeforeEach
-    public void setUp() {
+    public JavaxValidationTest() {
         validator = Validation.buildDefaultValidatorFactory().getValidator();
     }
 
@@ -36,7 +36,7 @@ public class JavaxValidationTest {
         assertEquals(2, violations.size());
 
         // test a person with not valid name
-        testPerson.setName("Any Wrong Name");
+        testPerson.setName("Name Surname Patronymic");
         violations = validator.validate(testPerson);
         assertEquals(2, violations.size());
 
@@ -46,18 +46,17 @@ public class JavaxValidationTest {
         assertEquals(1, violations.size());
 
         // test a person with year earlier than 1900
-        testPerson.setYear(1785);
+        testPerson.setYear(666);
         violations = validator.validate(testPerson);
         assertEquals(1, violations.size());
 
-
         // test a person with year later than current
-        testPerson.setYear(9090);
+        testPerson.setYear(6666);
         violations = validator.validate(testPerson);
         assertEquals(1, violations.size());
 
         // test a valid person
-        testPerson.setYear(1910);
+        testPerson.setYear(1975);
         violations = validator.validate(testPerson);
         assertTrue(violations.isEmpty());
     }
@@ -72,13 +71,13 @@ public class JavaxValidationTest {
         assertEquals(3, violations.size());
 
         // test a book with not valid title and author
-        testBook.setTitle("Any Wrong Title");
-        testBook.setAuthor("Wrong Author");
+        testBook.setTitle("Some title");
+        testBook.setAuthor("Some Author");
         violations = validator.validate(testBook);
         assertEquals(3, violations.size());
 
         // test a book with valid title and author
-        testBook.setTitle("Название книги");
+        testBook.setTitle("Название");
         testBook.setAuthor("Фамилия Имя");
         violations = validator.validate(testBook);
         assertEquals(1, violations.size());
@@ -89,12 +88,12 @@ public class JavaxValidationTest {
         assertEquals(1, violations.size());
 
         // test a book with year later than current
-        testBook.setYear(3000);
+        testBook.setYear(3113);
         violations = validator.validate(testBook);
         assertEquals(1, violations.size());
 
         // test a valid book
-        testBook.setYear(1950);
+        testBook.setYear(1891);
         violations = validator.validate(testBook);
         assertTrue(violations.isEmpty());
     }

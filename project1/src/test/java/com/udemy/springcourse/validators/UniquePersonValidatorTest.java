@@ -21,7 +21,7 @@ class UniquePersonValidatorTest {
     private final JdbcTemplate jdbcTemplate;
 
     private UniquePersonValidator validator;
-    public Errors errors;
+    private Errors errors;
 
     private Person testPerson;
 
@@ -58,6 +58,16 @@ class UniquePersonValidatorTest {
         validator.validate(testPerson, errors);
         assertTrue(errors.hasErrors());
         assertEquals(1, errors.getErrorCount());
+    }
+
+    @Test
+    void samePersonTest() {
+        testPerson.setName("Test Person");
+        testPerson.setId(1);
+        errors = new BeanPropertyBindingResult(testPerson, "person");
+
+        validator.validate(testPerson, errors);
+        assertFalse(errors.hasErrors());
     }
 
     @Test

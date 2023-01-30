@@ -12,9 +12,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
+
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @TestMethodOrder(MethodOrderer.Random.class)
@@ -46,18 +48,17 @@ public class JavaxValidationTest {
         assertEquals(1, violations.size());
 
         // test a person with year earlier than 1900
-        testPerson.setYear(1785);
+        testPerson.setYear(1414);
         violations = validator.validate(testPerson);
         assertEquals(1, violations.size());
 
-
         // test a person with year later than current
-        testPerson.setYear(9090);
+        testPerson.setYear(4444);
         violations = validator.validate(testPerson);
         assertEquals(1, violations.size());
 
         // test a valid person
-        testPerson.setYear(1910);
+        testPerson.setYear(1975);
         violations = validator.validate(testPerson);
         assertTrue(violations.isEmpty());
     }
@@ -89,12 +90,12 @@ public class JavaxValidationTest {
         assertEquals(1, violations.size());
 
         // test a book with year later than current
-        testBook.setYear(3000);
+        testBook.setYear(3113);
         violations = validator.validate(testBook);
         assertEquals(1, violations.size());
 
         // test a valid book
-        testBook.setYear(1950);
+        testBook.setYear(1891);
         violations = validator.validate(testBook);
         assertTrue(violations.isEmpty());
     }
