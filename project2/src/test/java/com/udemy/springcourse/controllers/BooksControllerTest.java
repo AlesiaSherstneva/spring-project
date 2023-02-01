@@ -62,7 +62,25 @@ class BooksControllerTest {
                         status().isOk(),
                         forwardedUrl("books/show")
                 );
-        verify(bookService, times(1)).findAll();
+
+        //test searching books with wrong parameters
+        mockMvc.perform(get("/books")
+                        .param("page", "1"))
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("books", testBooks),
+                        status().isOk(),
+                        forwardedUrl("books/show")
+                );
+        mockMvc.perform(get("/books")
+                        .param("books_per_page", "3"))
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("books", testBooks),
+                        status().isOk(),
+                        forwardedUrl("books/show")
+                );
+        verify(bookService, times(3)).findAll();
 
         // test with paging only
         when(bookService.findAndPage(anyInt(), anyInt())).thenReturn(testBooks);
@@ -149,7 +167,7 @@ class BooksControllerTest {
 
     @Test
     void createBookTest() throws Exception {
-        // test with empty book
+        // test with an empty book
         mockMvc.perform(post("/books")
                         .flashAttr("book", testBook))
                 .andExpectAll(
@@ -231,7 +249,7 @@ class BooksControllerTest {
     void updateBookTest() throws Exception {
         testBook.setId(new Random().nextInt(100));
 
-        // test with empty book
+        // test with an empty book
         mockMvc.perform(patch("/books/{id}", testBook.getId())
                         .flashAttr("book", testBook))
                 .andExpectAll(

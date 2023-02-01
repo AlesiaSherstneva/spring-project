@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class Person {
     @Column(name = "id")
     private int id;
 
+    @NotNull(message = "ФИО не может быть пустым")
     @Pattern(regexp = "([А-ЯЁ][а-яА-ЯёЁ\\-]+\\s){2}[А-ЯЁ][а-яё]+",
             message = "Должен быть формат \"Фамилия Имя Отчество\" на русском языке")
     @Column(name = "name")

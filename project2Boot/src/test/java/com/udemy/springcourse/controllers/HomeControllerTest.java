@@ -23,7 +23,9 @@ class HomeControllerTest {
     @Test
     void homePageTest() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/library"))
-                .andExpect(status().isOk())
-                .andExpect(forwardedUrl("index"));
+                .andExpectAll(
+                        status().isOk(),
+                        forwardedUrl("index")
+                );
     }
 }

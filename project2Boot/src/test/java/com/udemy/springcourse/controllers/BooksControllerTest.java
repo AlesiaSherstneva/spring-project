@@ -4,10 +4,7 @@ import com.udemy.springcourse.pojo.Book;
 import com.udemy.springcourse.pojo.Person;
 import com.udemy.springcourse.services.BookService;
 import com.udemy.springcourse.services.PeopleService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -47,7 +44,7 @@ class BooksControllerTest {
         testPerson = new Person();
         testPeople = new ArrayList<>();
         testBook = new Book();
-        testBook.setId(new Random().nextInt());
+        testBook.setId(new Random().nextInt(10000));
         testBooks = new ArrayList<>();
 
         mockMvc = MockMvcBuilders.standaloneSetup(booksController).build();
@@ -56,14 +53,45 @@ class BooksControllerTest {
 
     @Test
     void showBooksTest() throws Exception {
+        // test without sorting and paging
+        when(bookService.findAll()).thenReturn(testBooks);
+        mockMvc.perform(get("/library/books"))
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("books", testBooks),
+                        status().isOk(),
+                        forwardedUrl("books/show")
+                );
+
+        //test searching books with wrong parameters
+        mockMvc.perform(get("/library/books")
+                        .param("page", "1"))
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("books", testBooks),
+                        status().isOk(),
+                        forwardedUrl("books/show")
+                );
+        mockMvc.perform(get("/library/books")
+                        .param("books_per_page", "3"))
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("books", testBooks),
+                        status().isOk(),
+                        forwardedUrl("books/show")
+                );
+        verify(bookService, times(3)).findAll();
+
         // test searching books with sorting only
         when(bookService.findAndSortByYear()).thenReturn(testBooks);
         mockMvc.perform(get("/library/books")
                         .param("sort_by_year", "true"))
-                .andExpect(model().size(1))
-                .andExpect(model().attribute("books", testBooks))
-                .andExpect(status().isOk())
-                .andExpect(forwardedUrl("books/show"));
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("books", testBooks),
+                        status().isOk(),
+                        forwardedUrl("books/show")
+                );
         verify(bookService, times(1)).findAndSortByYear();
 
         // test searching books with paging only
@@ -71,10 +99,12 @@ class BooksControllerTest {
         mockMvc.perform(get("/library/books")
                         .param("page", "1")
                         .param("books_per_page", "3"))
-                .andExpect(model().size(1))
-                .andExpect(model().attribute("books", testBooks))
-                .andExpect(status().isOk())
-                .andExpect(forwardedUrl("books/show"));
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("books", testBooks),
+                        status().isOk(),
+                        forwardedUrl("books/show")
+                );
         verify(bookService, times(1)).findAndPage(anyInt(), anyInt());
 
         // test searching books with sorting and paging
@@ -83,35 +113,13 @@ class BooksControllerTest {
                         .param("page", "1")
                         .param("books_per_page", "3")
                         .param("sort_by_year", "true"))
-                .andExpect(model().size(1))
-                .andExpect(model().attribute("books", testBooks))
-                .andExpect(status().isOk())
-                .andExpect(forwardedUrl("books/show"));
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("books", testBooks),
+                        status().isOk(),
+                        forwardedUrl("books/show")
+                );
         verify(bookService, times(1)).findAndPageAndSortByYear(anyInt(), anyInt());
-
-        // test searching books without sorting and paging
-        when(bookService.findAll()).thenReturn(testBooks);
-        mockMvc.perform(get("/library/books"))
-                .andExpect(model().size(1))
-                .andExpect(model().attribute("books", testBooks))
-                .andExpect(status().isOk())
-                .andExpect(forwardedUrl("books/show"));
-
-        //test searching books with wrong parameters
-        mockMvc.perform(get("/library/books")
-                        .param("page", "1"))
-                .andExpect(model().size(1))
-                .andExpect(model().attribute("books", testBooks))
-                .andExpect(status().isOk())
-                .andExpect(forwardedUrl("books/show"));
-        mockMvc.perform(get("/library/books")
-                        .param("books_per_page", "3"))
-                .andExpect(model().size(1))
-                .andExpect(model().attribute("books", testBooks))
-                .andExpect(status().isOk())
-                .andExpect(forwardedUrl("books/show"));
-
-        verify(bookService, times(3)).findAll();
     }
 
     @Test
@@ -121,22 +129,28 @@ class BooksControllerTest {
 
         //test a book without a reader
         mockMvc.perform(get("/library/books/{id}", anyInt()))
-                .andExpect(status().isOk())
-                .andExpect(forwardedUrl("books/profile"))
-                .andExpect(model().size(3))
-                .andExpect(model().attributeExists("book"))
-                .andExpect(model().attributeExists("people"))
-                .andExpect(model().attributeDoesNotExist("reader"));
+                .andExpectAll(
+                        model().size(3),
+                        model().attributeExists("person"),
+                        model().attributeExists("book"),
+                        model().attributeExists("people"),
+                        model().attributeDoesNotExist("reader"),
+                        status().isOk(),
+                        forwardedUrl("books/profile")
+                );
 
         //test a book with a reader
         testBook.setReader(testPerson);
         mockMvc.perform(get("/library/books/{id}", anyInt()))
-                .andExpect(status().isOk())
-                .andExpect(forwardedUrl("books/profile"))
-                .andExpect(model().size(3))
-                .andExpect(model().attributeExists("book"))
-                .andExpect(model().attributeDoesNotExist("people"))
-                .andExpect(model().attributeExists("reader"));
+                .andExpectAll(
+                        model().size(3),
+                        model().attributeExists("person"),
+                        model().attributeExists("book"),
+                        model().attributeDoesNotExist("people"),
+                        model().attributeExists("reader"),
+                        status().isOk(),
+                        forwardedUrl("books/profile")
+                );
 
         verify(bookService, times(2)).findOneById(anyInt());
         verify(peopleService, times(1)).findAll();
@@ -145,10 +159,12 @@ class BooksControllerTest {
     @Test
     void addBookTest() throws Exception {
         mockMvc.perform(get("/library/books/new"))
-                .andExpect(status().isOk())
-                .andExpect(forwardedUrl("books/new"))
-                .andExpect(model().size(1))
-                .andExpect(model().attributeExists("book"));
+                .andExpectAll(
+                        model().size(1),
+                        model().attributeExists("book"),
+                        status().isOk(),
+                        forwardedUrl("books/new")
+                );
     }
 
     @Test
@@ -156,55 +172,66 @@ class BooksControllerTest {
         // test with empty new book
         mockMvc.perform(post("/library/books")
                         .flashAttr("book", testBook))
-                .andExpect(model().attribute("book", testBook))
-                .andExpect(model().errorCount(3))
-                .andExpect(model().attributeHasFieldErrors("book", "title", "author", "year"))
-                .andExpect(status().isOk())
-                .andExpect(forwardedUrl("books/new"));
+                .andExpectAll(
+                        model().attribute("book", testBook),
+                        model().errorCount(3),
+                        model().attributeHasFieldErrors("book", "title", "author", "year"),
+                        status().isOk(),
+                        forwardedUrl("books/new")
+                );
 
-        // test a new book with year earlier than 1445
-        testBook.setYear(1000);
-        mockMvc.perform(post("/library/books")
-                        .flashAttr("book", testBook))
-                .andExpect(model().attribute("book", testBook))
-                .andExpect(model().errorCount(3))
-                .andExpect(model().attributeHasFieldErrors("book", "title", "author", "year"))
-                .andExpect(status().isOk())
-                .andExpect(forwardedUrl("books/new"));
-
-        // test a new book with year later than current
-        testBook.setYear(3000);
-        mockMvc.perform(post("/library/books")
-                        .flashAttr("book", testBook))
-                .andExpect(model().attribute("book", testBook))
-                .andExpect(model().errorCount(3))
-                .andExpect(model().attributeHasFieldErrors("book", "title", "author", "year"))
-                .andExpect(status().isOk())
-                .andExpect(forwardedUrl("books/new"));
-
-        // test a new book with not valid names
+        // test a new book with not valid title and author
         testBook.setYear(1991);
         testBook.setTitle("Some title");
         testBook.setAuthor("Some name and surname");
         mockMvc.perform(post("/library/books")
                         .flashAttr("book", testBook))
-                .andExpect(model().attribute("book", testBook))
-                .andExpect(model().errorCount(2))
-                .andExpect(model().attributeHasFieldErrors("book", "title", "author"))
-                .andExpect(status().isOk())
-                .andExpect(forwardedUrl("books/new"));
+                .andExpectAll(
+                        model().attribute("book", testBook),
+                        model().errorCount(2),
+                        model().attributeHasFieldErrors("book", "title", "author"),
+                        status().isOk(),
+                        forwardedUrl("books/new")
+                );
 
-        // test a valid new book
+        // test a new book with year earlier than 1445
+        testBook.setYear(999);
         testBook.setTitle("Название");
         testBook.setAuthor("Фамилия Имя");
         mockMvc.perform(post("/library/books")
                         .flashAttr("book", testBook))
-                .andExpect(model().size(1))
-                .andExpect(model().attribute("book", testBook))
-                .andExpect(model().attributeHasNoErrors("book"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/library/books"));
+                .andExpectAll(
+                        model().attribute("book", testBook),
+                        model().errorCount(1),
+                        model().attributeHasFieldErrors("book", "year"),
+                        status().isOk(),
+                        forwardedUrl("books/new")
+                );
 
+        // test a new book with year later than current
+        testBook.setYear(3000);
+        mockMvc.perform(post("/library/books")
+                        .flashAttr("book", testBook))
+                .andExpectAll(
+                        model().attribute("book", testBook),
+                        model().errorCount(1),
+                        model().attributeHasFieldErrors("book", "year"),
+                        status().isOk(),
+                        forwardedUrl("books/new")
+                );
+
+
+        // test a valid new book
+        testBook.setYear(1881);
+        mockMvc.perform(post("/library/books")
+                        .flashAttr("book", testBook))
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("book", testBook),
+                        model().attributeHasNoErrors("book"),
+                        status().is3xxRedirection(),
+                        redirectedUrl("/library/books")
+                );
         verify(bookService, times(1)).save(any(Book.class));
     }
 
@@ -212,34 +239,53 @@ class BooksControllerTest {
     void editBookTest() throws Exception {
         when(bookService.findOneById(anyInt())).thenReturn(testBook);
         mockMvc.perform(get("/library/books/{id}/edit", anyInt()))
-                .andExpect(model().size(1))
-                .andExpect(model().attribute("book", testBook))
-                .andExpect(status().isOk())
-                .andExpect(forwardedUrl("books/edit"));
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("book", testBook),
+                        status().isOk(),
+                        forwardedUrl("books/edit")
+                );
         verify(bookService, times(1)).findOneById(anyInt());
     }
 
     @Test
     void updateBookTest() throws Exception {
-        // test with not valid edit book
+        // test with an empty book
         mockMvc.perform(patch("/library/books/{id}", testBook.getId())
                         .flashAttr("book", testBook))
-                .andExpect(model().size(1))
-                .andExpect(model().attribute("book", testBook))
-                .andExpect(status().isOk())
-                .andExpect(forwardedUrl("books/edit"));
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("book", testBook),
+                        status().isOk(),
+                        forwardedUrl("books/edit")
+                );
 
-        //test with valid edit book
+        // test a book with not valid fields
+        testBook.setTitle("Any Title");
+        testBook.setAuthor("Any Author");
+        testBook.setYear(7777);
+        mockMvc.perform(patch("/library/books/{id}", testBook.getId())
+                        .flashAttr("book", testBook))
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("book", testBook),
+                        model().attributeErrorCount("book", 3),
+                        status().isOk(),
+                        forwardedUrl("books/edit")
+                );
+
+        //test a book with valid fields
         testBook.setTitle("Название");
         testBook.setAuthor("Фамилия Имя");
-        testBook.setYear(1991);
+        testBook.setYear(1973);
         mockMvc.perform(patch("/library/books/{id}", testBook.getId())
                         .flashAttr("book", testBook))
-                .andExpect(model().size(1))
-                .andExpect(model().attribute("book", testBook))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/library/books"));
-
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("book", testBook),
+                        status().is3xxRedirection(),
+                        redirectedUrl("/library/books")
+                );
         verify(bookService, times(1)).update(anyInt(), any(Book.class));
     }
 
@@ -247,19 +293,23 @@ class BooksControllerTest {
     void addBookToPersonTest() throws Exception {
         mockMvc.perform(patch("/library/books/{id}/person", testBook.getId())
                         .flashAttr("person", testPerson))
-                .andExpect(model().size(1))
-                .andExpect(model().attribute("person", testPerson))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/library/books/" + testBook.getId()));
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("person", testPerson),
+                        status().is3xxRedirection(),
+                        redirectedUrl("/library/books/" + testBook.getId())
+                );
         verify(bookService, times(1)).addBookToPerson(any(Person.class), anyInt());
     }
 
     @Test
     void freeBookTest() throws Exception {
         mockMvc.perform(patch("/library/books/{id}/free", testBook.getId()))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/library/books/" + testBook.getId()));
-        verify(bookService, times(1)).freeBook(anyInt());
+                .andExpectAll(
+                        status().is3xxRedirection(),
+                        redirectedUrl("/library/books/" + testBook.getId())
+                );
+        verify(bookService, times(1)).freeBook(testBook.getId());
     }
 
     @Test
@@ -267,32 +317,41 @@ class BooksControllerTest {
         // test with empty search string
         mockMvc.perform(get("/library/books/search")
                         .param("startString", ""))
-                .andExpect(model().size(1))
-                .andExpect(model().attribute("startString", ""))
-                .andExpect(model().attributeDoesNotExist("books"))
-                .andExpect(status().isOk())
-                .andExpect(forwardedUrl("books/search"));
+                .andExpectAll(
+                        model().size(1),
+                        model().attribute("startString", ""),
+                        model().attributeDoesNotExist("books"),
+                        status().isOk(),
+                        forwardedUrl("books/search")
+                );
 
         // test with not empty search string
         when(bookService.searchBooks(anyString())).thenReturn(testBooks);
         mockMvc.perform(get("/library/books/search")
                         .param("startString", "any string"))
-                .andExpect(model().size(2))
-                .andExpect(model().attribute("startString", "any string"))
-                .andExpect(model().attribute("books", testBooks))
-                .andExpect(status().isOk())
-                .andExpect(forwardedUrl("books/search"));
-
+                .andExpectAll(
+                        model().size(2),
+                        model().attribute("startString", "any string"),
+                        model().attribute("books", testBooks),
+                        status().isOk(),
+                        forwardedUrl("books/search")
+                );
         verify(bookService, times(1)).searchBooks(anyString());
     }
 
     @Test
     void deleteBookTest() throws Exception {
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 9; i++) {
             mockMvc.perform(delete("/library/books/{id}", anyInt()))
                     .andExpect(status().is3xxRedirection())
                     .andExpect(redirectedUrl("/library/books"));
         }
-        verify(bookService, times(3)).delete(anyInt());
+        verify(bookService, times(9)).delete(anyInt());
+    }
+
+    @AfterEach
+    void tearDown() {
+        verifyNoMoreInteractions(bookService);
+        verifyNoMoreInteractions(peopleService);
     }
 }
