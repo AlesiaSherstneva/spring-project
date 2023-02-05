@@ -2,10 +2,7 @@ package com.udemy.springcourse.services;
 
 import com.udemy.springcourse.pojo.Person;
 import com.udemy.springcourse.repositories.PeopleRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -40,42 +37,65 @@ class PeopleServiceTest {
 
     @Test
     void findAllTest() {
+        // given
         when(peopleRepository.findAll()).thenReturn(testPeople);
-        assertSame(testPeople, peopleService.findAll());
+        // when
+        List<Person> receivedPeople = peopleService.findAll();
+        // then
+        assertIterableEquals(testPeople, receivedPeople);
         verify(peopleRepository).findAll();
     }
 
     @Test
     void findOneByIdTest() {
+        // given
         when(peopleRepository.findById(anyInt())).thenReturn(Optional.of(testPerson));
-        assertNotNull(peopleService.findOneById(anyInt()));
-        assertEquals("Test", peopleService.findOneById(anyInt()).getName());
-        verify(peopleRepository, times(2)).findById(anyInt());
+        // when
+        Person receivedPerson = peopleService.findOneById(anyInt());
+        // then
+        assertNotNull(receivedPerson);
+        assertEquals("Test", receivedPerson.getName());
+        verify(peopleRepository, times(1)).findById(anyInt());
     }
 
     @Test
     void findOneByNameTest() {
+        // given
         when(peopleRepository.findByName(anyString())).thenReturn(Optional.of(testPerson));
-        assertNotNull(peopleService.findOneByName(anyString()));
-        assertEquals("Test", peopleService.findOneByName(anyString()).getName());
-        verify(peopleRepository, times(2)).findByName(anyString());
+        // when
+        Person receivedPerson = peopleService.findOneByName(anyString());
+        // then
+        assertNotNull(receivedPerson);
+        assertEquals("Test", receivedPerson.getName());
+        verify(peopleRepository, times(1)).findByName(anyString());
     }
 
     @Test
     void saveTest() {
-        peopleService.save(testPerson);
-        verify(peopleRepository, times(1)).save(testPerson);
+        // given, when
+        for (int i = 0; i < 5; i++) peopleService.save(new Person());
+        // then
+        verify(peopleRepository, times(5)).save(any(Person.class));
     }
 
     @Test
     void updateTest() {
+        // given, when
         peopleService.update(anyInt(), testPerson);
+        // then
         verify(peopleRepository, times(1)).save(testPerson);
     }
 
     @Test
     void deleteTest() {
-        peopleService.delete(anyInt());
-        verify(peopleRepository, times(1)).deleteById(anyInt());
+        // given, when
+        for (int i = 0; i < 7; i++) peopleService.delete(anyInt());
+        // then
+        verify(peopleRepository, times(7)).deleteById(anyInt());
+    }
+
+    @AfterEach
+    void tearDown() {
+        verifyNoMoreInteractions(peopleRepository);
     }
 }
