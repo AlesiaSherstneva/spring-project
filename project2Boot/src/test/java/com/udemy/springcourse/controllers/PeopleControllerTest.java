@@ -248,7 +248,6 @@ class PeopleControllerTest {
 
     @AfterEach
     void tearDown() {
-        verifyNoMoreInteractions(peopleService);
-        verifyNoMoreInteractions(bookService);
+        verifyNoMoreInteractions(peopleService, bookService);
     }
 }

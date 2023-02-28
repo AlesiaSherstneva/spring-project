@@ -23,7 +23,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(BooksController.class)
+@WebMvcTest(PeopleController.class)
 @Import(UniquePersonValidator.class)
 @ContextConfiguration(classes = SpringConfig.class)
 @TestMethodOrder(MethodOrderer.Random.class)

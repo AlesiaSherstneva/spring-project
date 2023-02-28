@@ -274,7 +274,6 @@ class BooksControllerTest {
 
     @AfterEach
     void tearDown() {
-        verifyNoMoreInteractions(bookDAO);
-        verifyNoMoreInteractions(personDAO);
+        verifyNoMoreInteractions(personDAO, bookDAO);
     }
 }

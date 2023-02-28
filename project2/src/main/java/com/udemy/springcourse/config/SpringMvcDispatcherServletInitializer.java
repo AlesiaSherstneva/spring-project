@@ -11,8 +11,7 @@ import javax.servlet.ServletException;
 import java.util.EnumSet;
 
 @SuppressWarnings("NullableProblems")
-public class SpringMvcDispatcherServletInitializer
-        extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class SpringMvcDispatcherServletInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
     @Override
     protected Class<?>[] getRootConfigClasses() {
         return new Class[0];

@@ -351,7 +351,6 @@ class BooksControllerTest {
 
     @AfterEach
     void tearDown() {
-        verifyNoMoreInteractions(bookService);
-        verifyNoMoreInteractions(peopleService);
+        verifyNoMoreInteractions(peopleService, bookService);
     }
 }

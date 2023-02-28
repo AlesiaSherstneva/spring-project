@@ -20,7 +20,7 @@ CREATE TABLE Book (
     author VARCHAR(250) NOT NULL,
     year INT NOT NULL CHECK ( year > 1445 AND year <= EXTRACT(year FROM now())),
     taken_at TIMESTAMP
-    );
+);
 
 INSERT INTO Book (title, author, year)
 VALUES ('Над пропастью во ржи', 'Джером Сэлинджер', 1951),

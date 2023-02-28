@@ -4,7 +4,6 @@ package com.udemy.springcourse.controllers;
 import com.udemy.springcourse.dto.SensorDTO;
 import com.udemy.springcourse.exceptions.ErrorResponse;
 import com.udemy.springcourse.exceptions.SensorNotCreatedException;
-import com.udemy.springcourse.exceptions.SensorNotFoundException;
 import com.udemy.springcourse.pojos.Sensor;
 import com.udemy.springcourse.services.SensorsService;
 import com.udemy.springcourse.validators.UniqueSensorValidator;

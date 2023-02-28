@@ -10,7 +10,6 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.List;
 
-
 @Entity
 @Table(name = "Person")
 @Getter
