@@ -1,6 +1,8 @@
 package com.udemy.springcourse.config;
 
+import com.udemy.springcourse.dao.BookDAO;
 import com.udemy.springcourse.dao.PersonDAO;
+import com.udemy.springcourse.validators.UniquePersonValidator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -25,15 +27,5 @@ public class TestConfig implements WebMvcConfigurer {
     @Bean
     public JdbcTemplate jdbcTemplate() {
         return new JdbcTemplate(dataSource());
-    }
-
-    @Bean
-    public PersonDAO personDAO() {
-        return new PersonDAO(jdbcTemplate());
-    }
-
-    @Override
-    public void addResourceHandlers(final ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
     }
 }

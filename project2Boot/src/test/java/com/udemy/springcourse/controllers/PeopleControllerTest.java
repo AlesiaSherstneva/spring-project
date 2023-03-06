@@ -227,7 +227,7 @@ class PeopleControllerTest {
                 .andExpectAll(
                         model().size(1),
                         model().attribute("person", testPerson),
-                        model().attributeErrorCount("person", 0),
+                        model().attributeHasNoErrors("person"),
                         status().is3xxRedirection(),
                         redirectedUrl("/library/people")
                 );

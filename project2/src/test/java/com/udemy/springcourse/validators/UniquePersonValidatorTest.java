@@ -1,23 +1,30 @@
 package com.udemy.springcourse.validators;
 
+import com.udemy.springcourse.config.TestConfig;
 import com.udemy.springcourse.pojo.Person;
 import com.udemy.springcourse.repositories.PeopleRepository;
 import com.udemy.springcourse.services.PeopleService;
-import com.udemy.springcourse.util.H2databaseInitTest;
+import com.udemy.springcourse.util.TestDataInit;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.Errors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@TestPropertySource("classpath:application-test.properties")
+@ExtendWith(SpringExtension.class)
+@WebAppConfiguration
+@ContextConfiguration(classes = TestConfig.class)
+@Transactional
 @TestMethodOrder(MethodOrderer.Random.class)
-class UniquePersonValidatorTest extends H2databaseInitTest {
+class UniquePersonValidatorTest {
     private final Person testPerson;
+    private final TestDataInit dataInit;
 
     private final PeopleService peopleService;
     private final UniquePersonValidator validator;
@@ -26,9 +33,15 @@ class UniquePersonValidatorTest extends H2databaseInitTest {
     @Autowired
     public UniquePersonValidatorTest(PeopleRepository peopleRepository) {
         testPerson = new Person();
+        dataInit = new TestDataInit();
         peopleService = new PeopleService(peopleRepository);
         validator = new UniquePersonValidator(peopleService);
         errors = new BeanPropertyBindingResult(testPerson, "person");
+    }
+
+    @BeforeEach
+    void setUp() {
+        for (Person person: dataInit.getTestPeople()) peopleService.save(person);
     }
 
     @Test

@@ -343,8 +343,10 @@ class BooksControllerTest {
     void deleteBookTest() throws Exception {
         for (int i = 0; i < 9; i++) {
             mockMvc.perform(delete("/library/books/{id}", anyInt()))
-                    .andExpect(status().is3xxRedirection())
-                    .andExpect(redirectedUrl("/library/books"));
+                    .andExpectAll(
+                            status().is3xxRedirection(),
+                            redirectedUrl("/library/books")
+                    );
         }
         verify(bookService, times(9)).delete(anyInt());
     }
