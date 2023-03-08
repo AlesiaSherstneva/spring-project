@@ -5,6 +5,19 @@
 
 В ходе обучения были выполнены три учебных проекта.
 
+> **Warning**  
+> Для тех, кто тоже проходит этот курс и копирует себе мой репозиторий. Предупреждаю: в первом и втором проекте у меня 
+не такая реализация деплоя, как у преподавателя. Я не запускаю Tomcat из-под среды разработки, а устанавливаю war-файл
+на Tomcat в своей файловой системе. Поэтому без скачивания Tomcat и настройки прав доступа у вас мои проекты не
+запустятся. Учитывайте это, редактируйте pom.xml или гуглите настройку и запуск Tomcat.  
+> Также в проектах могут на какой-то момент времени не работать тесты (все или часть). В этом случае их можно удалить 
+или закомментировать.
+
+**Update:** на основании курса 
+["Spring Boot Unit Testing with JUnit, Mockito and MockMVC"](https://www.udemy.com/course/spring-boot-unit-testing/)
+я сейчас покрываю проекты юнит- и интеграционными тестами. Придется повозиться с разными конфигурациями, много гуглить,
+так как меня научили тестировать только SpringBoot-приложения. 
+
 ## project1
 
 ![project1-task.jpg](project1/img.jpg)
@@ -35,6 +48,10 @@ Thymeleaf, HTML, CSS.
 Профиль читателя, профиль книги, освобождение книги при удалении читателя:
 
 ![project1-img4.gif](project1/img4.gif)
+
+Отчёт о покрытии тестами:
+
+![project1-jacoco.png](project1/jacoco.png)
 
 ## project2
 
@@ -68,6 +85,10 @@ Spring Data, Lombok, Thymeleaf, HTML, CSS.
 
 ![project2-img3.gif](project2/img3.gif)
 
+Отчёт о покрытии тестами:
+
+![project2-jacoco.png](project2/jacoco.png)
+
 ### project2.5
 
 В папке project2Boot находится проект №2, переписанный на Spring Boot.
@@ -76,6 +97,10 @@ Spring Data, Lombok, Thymeleaf, HTML, CSS.
 http://localhost:8080/library
 
 Также возможен запуск из командной строки. Файл project2Boot.jar в папке target: java -jar project2Boot.jar
+
+Отчёт о покрытии тестами:
+
+![project2.5-jacoco.png](project2Boot/jacoco.png)
 
 ## project3
 
