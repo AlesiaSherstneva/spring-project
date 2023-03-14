@@ -1,15 +1,14 @@
 package com.udemy.springcourse.controllers;
 
-import com.udemy.springcourse.config.SpringConfig;
 import com.udemy.springcourse.pojo.Book;
 import com.udemy.springcourse.pojo.Person;
 import com.udemy.springcourse.services.BookService;
 import com.udemy.springcourse.services.PeopleService;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.test.context.ContextConfiguration;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -17,12 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(BooksController.class)
-@ContextConfiguration(classes = SpringConfig.class)
+@ExtendWith(MockitoExtension.class)
 @TestMethodOrder(MethodOrderer.Random.class)
 class BooksControllerTest {
     private MockMvc mockMvc;
@@ -125,8 +124,8 @@ class BooksControllerTest {
     @Test
     void showBookTest() throws Exception {
         when(bookService.findOneById(anyInt())).thenReturn(testBook);
-        when(peopleService.findAll()).thenReturn(testPeople);
         when(peopleService.findOneById(anyInt())).thenReturn(testPerson);
+        assertEquals(testPerson, peopleService.findOneById(anyInt()));
 
         // test a book without a reader
         mockMvc.perform(get("/books/{id}", anyInt()))

@@ -1,17 +1,16 @@
 package com.udemy.springcourse.controllers;
 
-import com.udemy.springcourse.config.SpringConfig;
 import com.udemy.springcourse.pojo.Book;
 import com.udemy.springcourse.pojo.Person;
 import com.udemy.springcourse.services.BookService;
 import com.udemy.springcourse.services.PeopleService;
 import com.udemy.springcourse.validators.UniquePersonValidator;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -23,9 +22,8 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(BooksController.class)
+@ExtendWith(MockitoExtension.class)
 @Import(UniquePersonValidator.class)
-@ContextConfiguration(classes = SpringConfig.class)
 @TestMethodOrder(MethodOrderer.Random.class)
 class PeopleControllerTest {
     private MockMvc mockMvc;
