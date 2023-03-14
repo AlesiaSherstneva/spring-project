@@ -1,7 +1,7 @@
 package com.udemy.springcourse.pojo;
 
 import com.udemy.springcourse.validators.CurrentYear;
-import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(exclude = {"id", "books"})
 public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

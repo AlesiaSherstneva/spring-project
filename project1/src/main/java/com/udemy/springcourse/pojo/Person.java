@@ -1,17 +1,14 @@
 package com.udemy.springcourse.pojo;
 
 import com.udemy.springcourse.validators.CurrentYear;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
+@EqualsAndHashCode(exclude = {"id"})
 public class Person {
     private int id;
 

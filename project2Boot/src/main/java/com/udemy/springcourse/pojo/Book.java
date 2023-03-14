@@ -1,7 +1,6 @@
 package com.udemy.springcourse.pojo;
 
 import com.udemy.springcourse.validators.CurrentYear;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,13 +10,13 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "Book")
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,5 +53,20 @@ public class Book {
 
     public boolean isExpired() {
         return (new Date().getTime() - takenAt.getTime()) / 86400000 > 10;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Book)) return false;
+        Book book = (Book) o;
+        return getYear() == book.getYear()
+                && getTitle().equals(book.getTitle())
+                && getAuthor().equals(book.getAuthor());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getTitle(), getAuthor(), getYear());
     }
 }

@@ -1,7 +1,6 @@
 package com.udemy.springcourse.pojo;
 
 import com.udemy.springcourse.validators.CurrentYear;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +10,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.List;
+import java.util.Objects;
 
 
 @Entity
@@ -18,7 +18,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,4 +37,17 @@ public class Person {
 
     @OneToMany(mappedBy = "reader")
     private List<Book> books;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Person)) return false;
+        Person person = (Person) o;
+        return getYear() == person.getYear() && getName().equals(person.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getYear());
+    }
 }
