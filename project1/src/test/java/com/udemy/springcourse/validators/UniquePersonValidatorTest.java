@@ -1,5 +1,6 @@
 package com.udemy.springcourse.validators;
 
+import com.udemy.springcourse.config.EmptyConfig;
 import com.udemy.springcourse.config.TestConfig;
 import com.udemy.springcourse.dao.PersonDAO;
 import com.udemy.springcourse.pojo.Person;
@@ -14,7 +15,7 @@ import org.springframework.validation.Errors;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJdbcTest
-@ContextConfiguration(classes = TestConfig.class)
+@ContextConfiguration(classes = EmptyConfig.class)
 @TestMethodOrder(MethodOrderer.Random.class)
 class UniquePersonValidatorTest {
     private final PersonDAO personDAO;
