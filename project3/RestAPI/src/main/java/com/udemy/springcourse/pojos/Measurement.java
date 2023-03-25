@@ -24,12 +24,12 @@ public class Measurement {
     private Integer id;
 
     @NotNull
-    @Min(value = -100, message = "Значение не может быть больше, чем -100")
+    @Min(value = -100, message = "Значение не может быть меньше, чем -100")
     @Max(value = 100, message = "Значение не может быть больше, чем 100")
     @Column(name = "value")
     private Double value;
 
-    @NotNull
+    @NotNull(message = "Значение должно быть true или false")
     @Column(name = "raining")
     private boolean raining;
 

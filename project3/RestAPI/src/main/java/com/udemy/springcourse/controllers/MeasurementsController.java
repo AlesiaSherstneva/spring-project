@@ -74,8 +74,8 @@ public class MeasurementsController {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler
-    private ResponseEntity<ErrorResponse> handleException(SensorNotFoundException exception) {
+    @ExceptionHandler(SensorNotFoundException.class)
+    private ResponseEntity<ErrorResponse> handleException() {
         ErrorResponse response = new ErrorResponse(
                 "Такой сенсор не зарегистрирован!",
                 System.currentTimeMillis()

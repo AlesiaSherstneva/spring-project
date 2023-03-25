@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 public class MeasurementDTO {
     @NotNull(message = "Значение не может быть пустым")
-    @Min(value = -100, message = "Значение не может быть больше, чем -100")
+    @Min(value = -100, message = "Значение не может быть меньше, чем -100")
     @Max(value = 100, message = "Значение не может быть больше, чем 100")
     private double value;
 
