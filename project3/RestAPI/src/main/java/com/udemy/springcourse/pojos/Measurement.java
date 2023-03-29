@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Measurement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
