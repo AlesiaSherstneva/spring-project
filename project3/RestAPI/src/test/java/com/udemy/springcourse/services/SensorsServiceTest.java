@@ -2,8 +2,7 @@ package com.udemy.springcourse.services;
 
 import com.udemy.springcourse.pojos.Sensor;
 import com.udemy.springcourse.repositories.SensorsRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -15,6 +14,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
+@TestMethodOrder(MethodOrderer.Random.class)
 class SensorsServiceTest {
     @MockBean
     private SensorsRepository sensorsRepository;
@@ -22,10 +22,9 @@ class SensorsServiceTest {
     @Autowired
     private SensorsService sensorsService;
 
-    private Sensor testSensor;
+    private final Sensor testSensor;
 
-    @BeforeEach
-    void setUp() {
+    public SensorsServiceTest() {
         testSensor = new Sensor();
     }
 
@@ -39,15 +38,6 @@ class SensorsServiceTest {
 
     @Test
     void findOneByNameIfPresentTest() {
-        findByName();
-    }
-
-    @Test
-    void findOneByNameOrElseThrowExceptionIfPresentTest() {
-        findByName();
-    }
-
-    private void findByName() {
         // given
         when(sensorsRepository.findByName(anyString())).thenReturn(Optional.of(testSensor));
         // when
@@ -55,6 +45,8 @@ class SensorsServiceTest {
         // then
         assertTrue(receivedSensor.isPresent());
         receivedSensor.ifPresent(sensor -> assertSame(testSensor, sensor));
+
+        verify(sensorsRepository, times(1)).findByName(anyString());
     }
 
     @Test
@@ -65,6 +57,21 @@ class SensorsServiceTest {
         Optional<Sensor> receivedSensor = sensorsService.findOneByName(anyString());
         // then
         assertFalse(receivedSensor.isPresent());
+
+        verify(sensorsRepository, times(1)).findByName(anyString());
+    }
+
+    @Test
+    void findOneByNameOrElseThrowExceptionIfPresentTest() {
+        // given
+        when(sensorsRepository.findByName(anyString())).thenReturn(Optional.of(testSensor));
+        // when
+        Optional<Sensor> receivedSensor = sensorsService.findOneByName(anyString());
+        // then
+        assertTrue(receivedSensor.isPresent());
+        receivedSensor.ifPresent(sensor -> assertSame(testSensor, sensor));
+
+        verify(sensorsRepository, times(1)).findByName(anyString());
     }
 
     @Test
@@ -77,7 +84,13 @@ class SensorsServiceTest {
             fail("There should be SensorNotFoundException");
         } catch (Exception exception) {
             assertEquals("SensorNotFoundException", exception.getClass().getSimpleName());
-            assertEquals(RuntimeException.class, exception.getClass().getSuperclass());
+        } finally {
+            verify(sensorsRepository, times(1)).findByName(anyString());
         }
+    }
+
+    @AfterEach
+    public void tearDown() {
+        verifyNoMoreInteractions(sensorsRepository);
     }
 }
