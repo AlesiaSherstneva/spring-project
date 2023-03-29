@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS Measurement;
+DROP TABLE IF EXISTS Sensor;
