@@ -7,10 +7,8 @@ import com.udemy.springcourse.services.PeopleService;
 import com.udemy.springcourse.validators.UniquePersonValidator;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -23,7 +21,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
-@Import(UniquePersonValidator.class)
 @TestMethodOrder(MethodOrderer.Random.class)
 class PeopleControllerTest {
     private MockMvc mockMvc;
@@ -34,25 +31,26 @@ class PeopleControllerTest {
     @Mock
     private BookService bookService;
 
-    @InjectMocks
-    private PeopleController peopleController;
-
     private Person testPerson;
     private List<Person> testPeople;
     private List<Book> testBooks;
 
+    private static final Random RANDOM = new Random();
+
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         testPerson = new Person();
         testPeople = new ArrayList<>();
         testBooks = new ArrayList<>();
 
-        mockMvc = MockMvcBuilders.standaloneSetup(peopleController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(new PeopleController
+                (peopleService, bookService, mock(UniquePersonValidator.class))).build();
     }
 
     @Test
-    void showPeopleTest() throws Exception {
+    public void showPeopleTest() throws Exception {
         when(peopleService.findAll()).thenReturn(testPeople);
+
         mockMvc.perform(get("/people"))
                 .andExpectAll(
                         model().size(1),
@@ -60,15 +58,15 @@ class PeopleControllerTest {
                         status().isOk(),
                         forwardedUrl("people/show")
                 );
+
         verify(peopleService, times(1)).findAll();
     }
 
     @Test
-    void showPersonTest() throws Exception {
+    public void showPersonWithoutBooksTest() throws Exception {
         when(peopleService.findOneById(anyInt())).thenReturn(testPerson);
         when(bookService.findByReader(any(Person.class))).thenReturn(testBooks);
 
-        //test with empty list of books
         mockMvc.perform(get("/people/{id}", anyInt()))
                 .andExpectAll(
                         model().size(1),
@@ -78,7 +76,15 @@ class PeopleControllerTest {
                         forwardedUrl("people/profile")
                 );
 
-        //test with not empty list of books
+        verify(peopleService, times(1)).findOneById(anyInt());
+        verify(bookService, times(1)).findByReader(any(Person.class));
+    }
+
+    @Test
+    public void showPersonWithABookTest() throws Exception {
+        when(peopleService.findOneById(anyInt())).thenReturn(testPerson);
+        when(bookService.findByReader(any(Person.class))).thenReturn(testBooks);
+
         testBooks.add(new Book());
         mockMvc.perform(get("/people/{id}", anyInt()))
                 .andExpectAll(
@@ -89,12 +95,12 @@ class PeopleControllerTest {
                         forwardedUrl("people/profile")
                 );
 
-        verify(peopleService, times(2)).findOneById(anyInt());
-        verify(bookService, times(2)).findByReader(any(Person.class));
+        verify(peopleService, times(1)).findOneById(anyInt());
+        verify(bookService, times(1)).findByReader(any(Person.class));
     }
 
     @Test
-    void addPersonTest() throws Exception {
+    public void addPersonTest() throws Exception {
         mockMvc.perform(get("/people/new"))
                 .andExpectAll(
                         model().size(1),
@@ -105,11 +111,7 @@ class PeopleControllerTest {
     }
 
     @Test
-    void createPersonTest() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(new PeopleController(
-                peopleService, bookService, mock(UniquePersonValidator.class))).build();
-
-        // test empty new person
+    public void createEmptyPersonTest() throws Exception {
         mockMvc.perform(post("/people")
                         .flashAttr("person", testPerson))
                 .andExpectAll(
@@ -119,8 +121,10 @@ class PeopleControllerTest {
                         status().isOk(),
                         forwardedUrl("people/new")
                 );
+    }
 
-        // test a person with not valid fields
+    @Test
+    public void createPersonWithNotValidNameTest() throws Exception {
         testPerson.setName("Name Surname Patronymic");
         testPerson.setYear(1800);
         mockMvc.perform(post("/people")
@@ -132,9 +136,13 @@ class PeopleControllerTest {
                         status().isOk(),
                         forwardedUrl("people/new")
                 );
+    }
+
+    @Test
+    public void createPersonWithNotValidYearTest() throws Exception {
+        testPerson.setName("Фамилия Имя Отчество");
 
         // test a person with year earlier than 1900
-        testPerson.setName("Фамилия Имя Отчество");
         testPerson.setYear(1000);
         mockMvc.perform(post("/people")
                         .flashAttr("person", testPerson))
@@ -157,9 +165,13 @@ class PeopleControllerTest {
                         status().isOk(),
                         forwardedUrl("people/new")
                 );
+    }
 
-        // test a person with valid fields
+    @Test
+    public void createPersonWithValidFieldsTest() throws Exception {
+        testPerson.setName("Фамилия Имя Отчество");
         testPerson.setYear(1956);
+
         mockMvc.perform(post("/people")
                         .flashAttr("person", testPerson))
                 .andExpectAll(
@@ -169,12 +181,14 @@ class PeopleControllerTest {
                         status().is3xxRedirection(),
                         redirectedUrl("/people")
                 );
+
         verify(peopleService, times(1)).save(any(Person.class));
     }
 
     @Test
-    void editTest() throws Exception {
+    public void editTest() throws Exception {
         when(peopleService.findOneById(anyInt())).thenReturn(testPerson);
+
         mockMvc.perform(get("/people/{id}/edit", anyInt()))
                 .andExpectAll(
                         model().size(1),
@@ -182,16 +196,14 @@ class PeopleControllerTest {
                         status().isOk(),
                         forwardedUrl("people/edit")
                 );
+
         verify(peopleService, times(1)).findOneById(anyInt());
     }
 
     @Test
-    void updateTest() throws Exception {
-        mockMvc = MockMvcBuilders.standaloneSetup(new PeopleController(
-                peopleService, bookService, mock(UniquePersonValidator.class))).build();
-        testPerson.setId(new Random().nextInt(100));
+    public void updatePersonWithEmptyFieldsTest() throws Exception {
+        testPerson.setId(RANDOM.nextInt(100));
 
-        // test empty new person
         mockMvc.perform(patch("/people/{id}", testPerson.getId())
                         .flashAttr("person", testPerson))
                 .andExpectAll(
@@ -201,8 +213,12 @@ class PeopleControllerTest {
                         status().isOk(),
                         forwardedUrl("people/edit")
                 );
+    }
 
-        // test a person with not valid fields
+    @Test
+    public void updatePersonWithNotValidFieldsTest() throws Exception {
+        testPerson.setId(RANDOM.nextInt(100));
+
         testPerson.setName("Name Surname Patronymic");
         testPerson.setYear(2345);
         mockMvc.perform(patch("/people/{id}", testPerson.getId())
@@ -214,10 +230,14 @@ class PeopleControllerTest {
                         status().isOk(),
                         forwardedUrl("people/edit")
                 );
+    }
 
-        // test a person with valid fields
+    @Test
+    public void updatePersonWithValidFieldsTest() throws Exception {
+        testPerson.setId(RANDOM.nextInt(100));
         testPerson.setName("Фамилия Имя Отчество");
         testPerson.setYear(2010);
+
         mockMvc.perform(patch("/people/{id}", testPerson.getId())
                         .flashAttr("person", testPerson))
                 .andExpectAll(
@@ -227,21 +247,23 @@ class PeopleControllerTest {
                         status().is3xxRedirection(),
                         redirectedUrl("/people")
                 );
+
         verify(peopleService, times(1)).update(anyInt(), any(Person.class));
     }
 
     @Test
-    void deletePersonTest() throws Exception {
+    public void deletePersonTest() throws Exception {
         mockMvc.perform(delete("/people/{id}", anyInt()))
                 .andExpectAll(
                         status().is3xxRedirection(),
                         redirectedUrl("/people")
                 );
+
         verify(peopleService, times(1)).delete(anyInt());
     }
 
     @AfterEach
-    void tearDown() {
+    public void tearDown() {
         verifyNoMoreInteractions(peopleService, bookService);
     }
 }

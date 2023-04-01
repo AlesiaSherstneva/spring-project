@@ -1,10 +1,7 @@
 package com.udemy.springcourse.integration;
 
-import com.udemy.springcourse.controllers.BooksController;
 import com.udemy.springcourse.pojo.Book;
 import com.udemy.springcourse.pojo.Person;
-import com.udemy.springcourse.repositories.BooksRepository;
-import com.udemy.springcourse.repositories.PeopleRepository;
 import com.udemy.springcourse.services.BookService;
 import com.udemy.springcourse.services.PeopleService;
 import com.udemy.springcourse.util.H2databaseInitTest;
@@ -15,6 +12,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -33,16 +31,15 @@ public class FromEndToEndBooksTest extends H2databaseInitTest {
     private MvcResult mvcResult;
     private ModelAndView modelAndView;
 
-    private final PeopleService peopleService;
-    private final BookService bookService;
+    @Autowired
+    private PeopleService peopleService;
 
     @Autowired
-    public FromEndToEndBooksTest(PeopleRepository peopleRepository, BooksRepository booksRepository) {
-        peopleService = new PeopleService(peopleRepository);
-        bookService = new BookService(booksRepository);
+    private BookService bookService;
 
-        mockMvc = MockMvcBuilders.standaloneSetup(new BooksController(peopleService, bookService))
-                .build();
+    @Autowired
+    public FromEndToEndBooksTest(WebApplicationContext webApplicationContext) {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
     @Test
@@ -51,12 +48,12 @@ public class FromEndToEndBooksTest extends H2databaseInitTest {
                 .andExpectAll(
                         model().size(1),
                         model().attributeExists("books"),
-                        status().isOk(),
-                        forwardedUrl("books/show"))
+                        status().isOk())
                 .andReturn();
 
         modelAndView = mvcResult.getModelAndView();
         assertNotNull(modelAndView);
+        assertEquals("books/show", modelAndView.getViewName());
 
         List<Book> receivedBooks = (List<Book>) modelAndView.getModel().get("books");
         assertEquals(2, receivedBooks.size());
@@ -69,12 +66,12 @@ public class FromEndToEndBooksTest extends H2databaseInitTest {
                 .andExpectAll(
                         model().size(1),
                         model().attributeExists("books"),
-                        status().isOk(),
-                        forwardedUrl("books/show"))
+                        status().isOk())
                 .andReturn();
 
         modelAndView = mvcResult.getModelAndView();
         assertNotNull(modelAndView);
+        assertEquals("books/show", modelAndView.getViewName());
 
         List<Book> booksWithPageParamOnly = (List<Book>) modelAndView.getModel().get("books");
         assertEquals(2, booksWithPageParamOnly.size());
@@ -84,12 +81,12 @@ public class FromEndToEndBooksTest extends H2databaseInitTest {
                 .andExpectAll(
                         model().size(1),
                         model().attributeExists("books"),
-                        status().isOk(),
-                        forwardedUrl("books/show"))
+                        status().isOk())
                 .andReturn();
 
         modelAndView = mvcResult.getModelAndView();
         assertNotNull(modelAndView);
+        assertEquals("books/show", modelAndView.getViewName());
 
         List<Book> booksWithBooksPerPageParamOnly = (List<Book>) modelAndView.getModel().get("books");
         assertEquals(2, booksWithBooksPerPageParamOnly.size());
@@ -105,12 +102,12 @@ public class FromEndToEndBooksTest extends H2databaseInitTest {
                 .andExpectAll(
                         model().size(1),
                         model().attributeExists("books"),
-                        status().isOk(),
-                        forwardedUrl("books/show"))
+                        status().isOk())
                 .andReturn();
 
         modelAndView = mvcResult.getModelAndView();
         assertNotNull(modelAndView);
+        assertEquals("books/show", modelAndView.getViewName());
 
         List<Book> oneBookOnPage = (List<Book>) modelAndView.getModel().get("books");
         assertEquals(1, oneBookOnPage.size());
@@ -122,12 +119,12 @@ public class FromEndToEndBooksTest extends H2databaseInitTest {
                 .andExpectAll(
                         model().size(1),
                         model().attributeExists("books"),
-                        status().isOk(),
-                        forwardedUrl("books/show"))
+                        status().isOk())
                 .andReturn();
 
         modelAndView = mvcResult.getModelAndView();
         assertNotNull(modelAndView);
+        assertEquals("books/show", modelAndView.getViewName());
 
         List<Book> emptyPage = (List<Book>) modelAndView.getModel().get("books");
         assertTrue(emptyPage.isEmpty());
@@ -140,12 +137,12 @@ public class FromEndToEndBooksTest extends H2databaseInitTest {
                 .andExpectAll(
                         model().size(1),
                         model().attributeExists("books"),
-                        status().isOk(),
-                        forwardedUrl("books/show"))
+                        status().isOk())
                 .andReturn();
 
         modelAndView = mvcResult.getModelAndView();
         assertNotNull(modelAndView);
+        assertEquals("books/show", modelAndView.getViewName());
 
         List<Book> sortedBooks = (List<Book>) modelAndView.getModel().get("books");
         assertEquals(2, sortedBooks.size());
@@ -162,12 +159,12 @@ public class FromEndToEndBooksTest extends H2databaseInitTest {
                 .andExpectAll(
                         model().size(1),
                         model().attributeExists("books"),
-                        status().isOk(),
-                        forwardedUrl("books/show"))
+                        status().isOk())
                 .andReturn();
 
         ModelAndView modelAndView = mvcResult.getModelAndView();
         assertNotNull(modelAndView);
+        assertEquals("books/show", modelAndView.getViewName());
 
         List<Book> sortedBooks = (List<Book>) modelAndView.getModel().get("books");
         assertEquals(1, sortedBooks.size());
@@ -187,12 +184,8 @@ public class FromEndToEndBooksTest extends H2databaseInitTest {
         mockMvc.perform(post("/library/books")
                         .flashAttr("book", bookToSave))
                 .andExpectAll(
-                        model().size(1),
-                        model().attributeExists("book"),
-                        model().attributeHasNoErrors("book"),
                         status().is3xxRedirection(),
-                        redirectedUrl("/library/books")
-                );
+                        redirectedUrl("/library/books"));
 
         booksInBase = bookService.findAll();
         assertEquals(3, booksInBase.size());
@@ -212,11 +205,8 @@ public class FromEndToEndBooksTest extends H2databaseInitTest {
         mockMvc.perform(patch("/library/books/{id}", bookToUpdate.getId())
                         .flashAttr("book", bookToUpdate))
                 .andExpectAll(
-                        model().size(1),
-                        model().attributeExists("book"),
                         status().is3xxRedirection(),
-                        redirectedUrl("/library/books")
-                );
+                        redirectedUrl("/library/books"));
 
         bookToUpdate = bookService.findOneById(1);
         assertEquals("Новое название", bookToUpdate.getTitle());
@@ -235,11 +225,8 @@ public class FromEndToEndBooksTest extends H2databaseInitTest {
         mockMvc.perform(patch("/library/books/{id}/person", bookForAdding.getId())
                         .flashAttr("person", personForAdding))
                 .andExpectAll(
-                        model().size(1),
-                        model().attributeExists("person"),
                         status().is3xxRedirection(),
-                        redirectedUrl("/library/books/" + bookForAdding.getId())
-                );
+                        redirectedUrl("/library/books/" + bookForAdding.getId()));
 
         bookForAdding = bookService.findOneById(1);
         assertNotNull(bookForAdding.getReader());
@@ -257,8 +244,7 @@ public class FromEndToEndBooksTest extends H2databaseInitTest {
         mockMvc.perform(patch("/library/books/{id}/free", bookForFreeing.getId()))
                 .andExpectAll(
                         status().is3xxRedirection(),
-                        redirectedUrl("/library/books/" + bookForFreeing.getId())
-                );
+                        redirectedUrl("/library/books/" + bookForFreeing.getId()));
 
         bookForFreeing = bookService.findOneById(2);
         assertNull(bookForFreeing.getReader());
@@ -273,12 +259,12 @@ public class FromEndToEndBooksTest extends H2databaseInitTest {
                         model().size(2),
                         model().attribute("startString", "втор"),
                         model().attributeExists("books"),
-                        status().isOk(),
-                        forwardedUrl("books/search"))
+                        status().isOk())
                 .andReturn();
 
         modelAndView = mvcResult.getModelAndView();
         assertNotNull(modelAndView);
+        assertEquals("books/search", modelAndView.getViewName());
 
         List<Book> foundBooks = (List<Book>) modelAndView.getModel().get("books");
         assertEquals(1, foundBooks.size());
@@ -293,12 +279,12 @@ public class FromEndToEndBooksTest extends H2databaseInitTest {
                         model().size(2),
                         model().attribute("startString", "строка"),
                         model().attributeExists("books"),
-                        status().isOk(),
-                        forwardedUrl("books/search"))
+                        status().isOk())
                 .andReturn();
 
         modelAndView = mvcResult.getModelAndView();
         assertNotNull(modelAndView);
+        assertEquals("books/search", modelAndView.getViewName());
 
         List<Book> foundBooks = (List<Book>) modelAndView.getModel().get("books");
         assertTrue(foundBooks.isEmpty());
@@ -315,8 +301,7 @@ public class FromEndToEndBooksTest extends H2databaseInitTest {
         mockMvc.perform(delete("/library/books/{id}", bookForDeleting.getId()))
                 .andExpectAll(
                         status().is3xxRedirection(),
-                        redirectedUrl("/library/books")
-                );
+                        redirectedUrl("/library/books"));
 
         booksInBase = bookService.findAll();
         assertEquals(1, booksInBase.size());

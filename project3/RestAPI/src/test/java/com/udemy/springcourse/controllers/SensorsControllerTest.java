@@ -47,7 +47,6 @@ class SensorsControllerTest {
     @BeforeEach
     public void setUp() {
         testSensorDTO = new SensorDTO();
-        mockMvc = MockMvcBuilders.standaloneSetup(sensorsController).build();
     }
 
     @Test

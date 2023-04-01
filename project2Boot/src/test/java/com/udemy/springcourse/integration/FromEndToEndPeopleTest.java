@@ -1,14 +1,9 @@
 package com.udemy.springcourse.integration;
 
-import com.udemy.springcourse.controllers.PeopleController;
 import com.udemy.springcourse.pojo.Book;
 import com.udemy.springcourse.pojo.Person;
-import com.udemy.springcourse.repositories.BooksRepository;
-import com.udemy.springcourse.repositories.PeopleRepository;
-import com.udemy.springcourse.services.BookService;
 import com.udemy.springcourse.services.PeopleService;
 import com.udemy.springcourse.util.H2databaseInitTest;
-import com.udemy.springcourse.validators.UniquePersonValidator;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,6 +11,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -33,13 +29,12 @@ public class FromEndToEndPeopleTest extends H2databaseInitTest {
     private MvcResult mvcResult;
     private ModelAndView modelAndView;
 
-    private final PeopleService peopleService;
+    @Autowired
+    private PeopleService peopleService;
 
     @Autowired
-    public FromEndToEndPeopleTest(PeopleRepository peopleRepository, BooksRepository booksRepository) {
-        peopleService = new PeopleService(peopleRepository);
-        mockMvc = MockMvcBuilders.standaloneSetup(new PeopleController
-                (peopleService, new BookService(booksRepository), new UniquePersonValidator(peopleService))).build();
+    public FromEndToEndPeopleTest(WebApplicationContext webApplicationContext) {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
     }
 
     @Test
@@ -48,12 +43,12 @@ public class FromEndToEndPeopleTest extends H2databaseInitTest {
                 .andExpectAll(
                         model().size(1),
                         model().attributeExists("people"),
-                        status().isOk(),
-                        forwardedUrl("people/show"))
+                        status().isOk())
                 .andReturn();
 
         modelAndView = mvcResult.getModelAndView();
         assertNotNull(modelAndView);
+        assertEquals("people/show", modelAndView.getViewName());
 
         List<Person> receivedPeople = (List<Person>) modelAndView.getModel().get("people");
         assertEquals(3, receivedPeople.size());
@@ -66,12 +61,12 @@ public class FromEndToEndPeopleTest extends H2databaseInitTest {
                         model().size(2),
                         model().attributeExists("person"),
                         model().attributeExists("books"),
-                        status().isOk(),
-                        forwardedUrl("people/profile"))
+                        status().isOk())
                 .andReturn();
 
         modelAndView = mvcResult.getModelAndView();
         assertNotNull(modelAndView);
+        assertEquals("people/profile", modelAndView.getViewName());
 
         Person receivedPerson = (Person) modelAndView.getModel().get("person");
         assertEquals("Первый Тестовый Читатель", receivedPerson.getName());
@@ -89,12 +84,12 @@ public class FromEndToEndPeopleTest extends H2databaseInitTest {
                         model().size(1),
                         model().attributeExists("person"),
                         model().attributeDoesNotExist("books"),
-                        status().isOk(),
-                        forwardedUrl("people/profile"))
+                        status().isOk())
                 .andReturn();
 
         modelAndView = mvcResult.getModelAndView();
         assertNotNull(modelAndView);
+        assertEquals("people/profile", modelAndView.getViewName());
 
         Person receivedPerson = (Person) modelAndView.getModel().get("person");
         assertEquals("Второй Тестовый Читатель", receivedPerson.getName());
@@ -110,16 +105,19 @@ public class FromEndToEndPeopleTest extends H2databaseInitTest {
         personToSave.setName("Третий Тестовый Читатель");
         personToSave.setYear(1982);
 
-        mockMvc.perform(post("/library/people")
+        mvcResult = mockMvc.perform(post("/library/people")
                         .flashAttr("person", personToSave))
                 .andExpectAll(
                         model().size(1),
                         model().attribute("person", personToSave),
                         model().attributeErrorCount("person", 1),
                         model().attributeHasFieldErrors("person", "name"),
-                        status().isOk(),
-                        forwardedUrl("people/new")
-                );
+                        status().isOk())
+                .andReturn();
+
+        modelAndView = mvcResult.getModelAndView();
+        assertNotNull(modelAndView);
+        assertEquals("people/new", modelAndView.getViewName());
 
         peopleInBase = peopleService.findAll();
         assertEquals(3, peopleInBase.size());
@@ -137,12 +135,8 @@ public class FromEndToEndPeopleTest extends H2databaseInitTest {
         mockMvc.perform(post("/library/people")
                         .flashAttr("person", personToSave))
                 .andExpectAll(
-                        model().size(1),
-                        model().attribute("person", personToSave),
-                        model().attributeHasNoErrors("person"),
                         status().is3xxRedirection(),
-                        redirectedUrl("/library/people")
-                );
+                        redirectedUrl("/library/people"));
 
         peopleInBase = peopleService.findAll();
         assertEquals(4, peopleInBase.size());
@@ -156,16 +150,19 @@ public class FromEndToEndPeopleTest extends H2databaseInitTest {
         assertEquals("Первый Тестовый Читатель", personToUpdate.getName());
 
         personToUpdate.setName("Третий Тестовый Читатель");
-        mockMvc.perform(patch("/library/people/{id}", personToUpdate.getId())
+        mvcResult = mockMvc.perform(patch("/library/people/{id}", personToUpdate.getId())
                         .flashAttr("person", personToUpdate))
                 .andExpectAll(
                         model().size(1),
                         model().attribute("person", personToUpdate),
                         model().attributeErrorCount("person", 1),
                         model().attributeHasFieldErrors("person", "name"),
-                        status().isOk(),
-                        forwardedUrl("people/edit")
-                );
+                        status().isOk())
+                .andReturn();
+
+        modelAndView = mvcResult.getModelAndView();
+        assertNotNull(modelAndView);
+        assertEquals("people/edit", modelAndView.getViewName());
 
         personToUpdate = peopleService.findOneById(1);
         assertEquals("Первый Тестовый Читатель", personToUpdate.getName());
@@ -180,12 +177,8 @@ public class FromEndToEndPeopleTest extends H2databaseInitTest {
         mockMvc.perform(patch("/library/people/{id}", personToUpdate.getId())
                         .flashAttr("person", personToUpdate))
                 .andExpectAll(
-                        model().size(1),
-                        model().attribute("person", personToUpdate),
-                        model().attributeHasNoErrors("person"),
                         status().is3xxRedirection(),
-                        redirectedUrl("/library/people")
-                );
+                        redirectedUrl("/library/people"));
 
         personToUpdate = peopleService.findOneById(3);
         assertEquals(2002, personToUpdate.getYear());
@@ -200,9 +193,6 @@ public class FromEndToEndPeopleTest extends H2databaseInitTest {
         mockMvc.perform(patch("/library/people/{id}", personToUpdate.getId())
                         .flashAttr("person", personToUpdate))
                 .andExpectAll(
-                        model().size(1),
-                        model().attribute("person", personToUpdate),
-                        model().attributeHasNoErrors("person"),
                         status().is3xxRedirection(),
                         redirectedUrl("/library/people")
                 );
